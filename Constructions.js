@@ -1,7 +1,8 @@
 var CONST = {
     RAMPART_MAX: 1,
     RAMPART_FIX: 0.50,
-    STANDARD_FIX: 0.75,
+    STANDARD_FIX: 0.50,
+    STANDARD_MAX : 0.90,
 };
 var Cache = require('Cache');
 
@@ -9,7 +10,7 @@ function Constructions(room) {
     this.room = room;
     this.cache = new Cache();
     this.sites = this.room.find(FIND_CONSTRUCTION_SITES);
-    this.structures = this.room.find(FIND_STRUCTURES);
+    this.structures = this.room.find(FIND_MY_STRUCTURES);
     this.towers = this.room.find(FIND_STRUCTURES, { filter : (s) => s.structureType == STRUCTURE_TOWER});
     this.walls = this.room.find(FIND_STRUCTURES, { filter : (s) => s.structureType == STRUCTURE_WALL});
     this.damagedStructures = this.getDamagedStructures();
@@ -27,8 +28,8 @@ Constructions.prototype.getDamagedStructures = function() {
                 {
                     filter: function(s) {
                         var targets = s.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
-						if(targets.length != 0)
-						    return false;
+                        if(targets.length != 0)
+                            return false;
 
                         if (s.structureType == STRUCTURE_WALL)
                             return false;
@@ -57,7 +58,7 @@ Constructions.prototype.getUpgradeableStructures = function() {
                         if (s.structureType == STRUCTURE_WALL)
                             return false;
 
-                        if((s.hits < s.hitsMax && s.structureType != STRUCTURE_RAMPART) || (s.structureType == STRUCTURE_RAMPART && s.hits / s.hitsMax < CONST.RAMPART_MAX))
+                        if((s.hits / s.hitsMax < CONST.STANDARD_MAX && s.structureType != STRUCTURE_RAMPART) || (s.structureType == STRUCTURE_RAMPART && s.hits / s.hitsMax < CONST.RAMPART_MAX))
                             return true;
                     }
                 }
@@ -153,7 +154,7 @@ Constructions.prototype.getDamagedWalls = function() {
             }
 
             walls.sort((a,b) => {
-                    return a.hits - b.hits
+                return a.hits - b.hits
                 }
             );
             return walls;

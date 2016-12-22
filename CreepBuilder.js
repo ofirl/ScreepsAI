@@ -12,7 +12,6 @@ function creepBuilder(creep, constructionsManager, depositManager) {
 };
 
 creepBuilder.prototype.init = function() {
-    this.remember('role', 'CreepBuilder');
     if(!this.remember('srcRoom')) {
         this.remember('srcRoom', this.creep.room.name);
     }
@@ -40,16 +39,12 @@ creepBuilder.prototype.act = function() {
 
     // creep should withdraw energy
     if (this.remember('last-action') == ACTIONS.WITHDRAW) {
-        var source = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToWithdraw());
+        var source = this.depositManager.storage;
+        if (!source)
+            source = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToWithdraw());
+        
         if (source && source.transfer(this.creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
             this.creep.moveTo(source);
-        else {
-            if (this.depositManager.energyDeposits.length == 0) {
-                source = this.creep.pos.findClosestByPath(this.depositManager.getAvailableExtensionsToWithdraw());
-                if (source && source.transferEnergy(this.creep) == ERR_NOT_IN_RANGE)
-                    this.creep.moveTo(source);
-            }
-        }
     }
     // creep should build
     else {

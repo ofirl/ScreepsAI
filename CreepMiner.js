@@ -14,8 +14,6 @@ function creepMiner(creep, resourceManager, depositManager) {
 };
 
 creepMiner.prototype.init = function() {
-    this.remember('role', 'CreepMiner');
-
     if(!this.remember('source')) {
         var src = this.resourceManager.getAvailableResource();
         if (src)
@@ -32,12 +30,22 @@ creepMiner.prototype.init = function() {
 
     this.resource = this.resourceManager.getResourceById(this.remember('source'));
 
+    if (!this.remember('source-container')) {
+        var container = this.depositManager.getLonelyContainer(this.resourceManager.population.creeps, 'CreepMiner');
+        if (container != undefined)
+            this.remember('source-container', container.id);
+    }
+
+    this.container = Game.getObjectById(this.remember('source-container'));
+
     this.act();
 };
 
 creepMiner.prototype.act = function() {
     // creep carry is full
-    if (this.remember('last-action') == ACTIONS.HARVEST && this.creep.carry.energy == this.creep.carryCapacity)
+    if (this.remember('last-action') == ACTIONS.HARVEST && this.creep.carry.energy == this.creep.carryCapacity &&
+        !this.resourceManager.population.spawnedAllEssentialRoles() &&
+        (this.container != undefined && this.container.store.energy == this.container.storeCapacity))
         this.remember('last-action', ACTIONS.DEPOSIT);
 
     // creep finished depositing
@@ -46,8 +54,16 @@ creepMiner.prototype.act = function() {
 
     // creep should harvest
     if (this.remember('last-action') == ACTIONS.HARVEST) {
-        if (this.creep.harvest(this.resource) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(this.resource);
+        if (this.container != undefined) {
+            if (this.creep.pos.isEqualTo(this.container.pos.x,this.container.pos.y))
+                this.creep.harvest(this.resource);
+            else
+                this.creep.moveTo(this.container);
+        }
+        else {
+            if (this.creep.harvest(this.resource) == ERR_NOT_IN_RANGE)
+                this.creep.moveTo(this.resource);
+        }
     }
     // creep should deposit
     else {

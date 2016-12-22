@@ -16,10 +16,10 @@ function roomManager(room, roomHandler) {
     this.resourceManager = new Resources(this.room, this.population);
     this.constructionManager = new Constructions(this.room);
     this.population.typeDistribution.CreepBuilder.max = 4;
-    //this.population.typeDistribution.CreepMiner.max = (this.resourceManager.getSources().length+1)*2;
-    this.population.typeDistribution.CreepMiner.max = 3;
+    this.population.typeDistribution.CreepMiner.max = this.resourceManager.getSources().length;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;
     this.population.typeDistribution.CreepCarrier.max = 2;
+    this.population.typeDistribution.CreepLorry.max = this.resourceManager.getSources().length;
     this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.population, this.roomHandler);
 }
 
@@ -32,7 +32,7 @@ roomManager.prototype.loadCreeps = function() {
     }
 
     this.distributeBuilders();
-    this.distributeResources('CreepMiner');
+    //this.distributeResources('CreepMiner');
     //this.distributeResources('CreepCarrier');
     //this.distributeCarriers();
 };
@@ -94,28 +94,55 @@ roomManager.prototype.populate = function() {
         if(this.depositManager.spawns[i].spawning)
             continue;
 
-        if((this.depositManager.energy() / this.depositManager.energyCapacity()) > 0.2) {
-            var types = this.population.getTypes();
-            var priority = ['CreepMiner', 'CreepBuilder', 'CreepCarrier'];
-            for (var i =0 ; i < priority.length; i++) {
-                var ctype = this.population.getType(priority[i]);
-                if (ctype.total < ctype.max) {
-                    this.creepFactory.new(ctype.type, this.depositManager.getSpawnDeposit());
-                    break;
-                }
-            }
+        if (this.population.typeDistribution.CreepMiner.total == 0)
+            this.creepFactory.new(Constants.ROLE_MINER, this.depositManager.getSpawnDeposit());
+        if (this.population.typeDistribution.CreepLorry.total == 0)
+            this.creepFactory.new(Constants.ROLE_LORRY, this.depositManager.getSpawnDeposit());
+        if (this.population.typeDistribution.CreepCarrier.total == 0)
+            this.creepFactory.new(Constants.ROLE_CARRIER, this.depositManager.getSpawnDeposit());
 
-            /*
+        if(this.depositManager.energy() > 200) {
+            var types = this.population.getTypes();
             for(var i = 0; i < types.length; i++) {
                 var ctype = types[i];
                 if(this.depositManager.deposits.length > ctype.minExtensions) {
-                    if((ctype.goalPercentage > ctype.currentPercentage && ctype.total < ctype.max) || ctype.total == 0 || ctype.total < ctype.max) {
+                    if(ctype.total < ctype.max) {
                         this.creepFactory.new(ctype.type, this.depositManager.getSpawnDeposit());
                         break;
                     }
                 }
-            }*/
+            }
         }
+    }
+};
+
+roomManager.prototype.OperateTowers = function() {
+    var hostiles = this.room.find(FIND_HOSTILE_CREEPS);
+    if (hostiles.length > 0) {
+        // if hostiles found
+        var towers = this.room.find(FIND_MY_STRUCTURES, {
+            filter : (s) => s.structureType == STRUCTURE_TOWER
+        });
+        for (let tower of towers) {
+            var target = tower.pos.findClosestByRange(hostiles);
+            tower.attack(target);
+        }
+    }
+    else {
+        var damagedCreeps = this.room.find(FIND_MY_CREEPS, {
+            filter : (c) => c.hits < c.hitsMax
+        });
+        // if damaged friendly creeps found
+        if (damagedCreeps.length > 0) {
+            var towers = this.room.find(FIND_MY_STRUCTURES, {
+                filter : (s) => s.structureType == STRUCTURE_TOWER
+            });
+            for (let tower of towers) {
+                var target = tower.pos.findClosestByRange(damagedCreeps);
+                tower.heal(target);
+            }
+        }
+
     }
 };
 

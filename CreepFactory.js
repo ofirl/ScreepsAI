@@ -1,6 +1,7 @@
 var CreepBase = require('CreepBase');
 var CreepBuilder = require('CreepBuilder');
 var CreepMiner = require('CreepMiner');
+var CreepLorry = require('CreepLorry');
 //var CreepSoldier = require('CreepSoldier');
 //var CreepHealer = require('CreepHealer');
 //var CreepScout = require('CreepScout');
@@ -30,6 +31,9 @@ creepFactory.prototype.load = function(creep) {
         case 'CreepMiner':
             loadedCreep = new CreepMiner(creep, this.resourceManager, this.depositManager);
             break;
+        case 'CreepLorry':
+            loadedCreep = new CreepLorry(creep, this.depositManager, this.resourceManager);
+            break;
         case 'CreepSoldier':
             //loadedCreep = new CreepSoldier(creep);
             break;
@@ -54,7 +58,7 @@ creepFactory.prototype.load = function(creep) {
 };
 
 creepFactory.prototype.new = function(creepType, spawn) {
-    var name = spawn.createCustomCreep(spawn.room.energyCapacityAvailable, creepType);
+    var name = spawn.createCustomCreep(spawn.room.energyAvailable, creepType);
     if (typeof name == 'string')
         console.log("Spawned new " + creepType + " : " + name);
 };

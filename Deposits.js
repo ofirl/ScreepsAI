@@ -25,9 +25,14 @@ function Deposits(room) {
             filter: filterExtensions
         }
     );
+    this.resourceContainers = this.room.find(FIND_STRUCTURES,
+        {
+            filter : filterResourceContainers
+        }
+    );
     this.droppedEnergy = this.room.find(FIND_DROPPED_ENERGY);
-    this.droppedEnergy.concat(this.room.find(FIND_DROPPED_RESOURCES));
-    
+    this.storage = this.room.storage;
+
 	this.spawns = [];
 	for(var n in Game.spawns) {
 		var s = Game.spawns[n];
@@ -89,6 +94,26 @@ Deposits.prototype.getClosestEmptyDeposit = function(creep) {
 	return deposit;
 };
 
+Deposits.prototype.getLonelyContainer = function(creeps, type) {
+    var containers = [];
+    for (var i = 0 ; i < creeps.length; i++)
+    {
+        var creep = creeps[i];
+        if (creep.memory.role != type)
+            continue;
+
+        var source = creep.memory['source-container'];
+        if (source)
+            containers.push(source);
+    }
+    for (var i = 0; i < this.resourceContainers.length; i++) {
+        var container = this.resourceContainers[i];
+        if (containers.indexOf(container.id) == -1)
+            return container;
+    }
+    return false;
+};
+
 Deposits.prototype.energy = function() {
 	return this.cache.remember(
 		'deposits-energy',
@@ -99,7 +124,7 @@ Deposits.prototype.energy = function() {
 
 			for(var i = 0; i < this.spawns.length; i++)
 				energy += this.spawns[i].energy;
-            
+
 			return energy;
 		}.bind(this)
 	);
@@ -187,6 +212,15 @@ Deposits.prototype.getAvailableContainersToDeposit = function() {
     );
 };
 
+Deposits.prototype.getResourceContainers = function() {
+    return this.cache.remember(
+        'resource-containers',
+        function() {
+            return this.resourceContainers;
+        }.bind(this)
+    );
+};
+
 Deposits.prototype.getAvailableDepositsToDeposit = function() {
     return this.cache.remember(
         'deposits-available-to-deposit',
@@ -213,6 +247,13 @@ function filterDeposits(structure) {
 
 function filterEnergyContainers(structure) {
     if(Constants.energyDepositsStructures.indexOf(structure.structureType) != -1)
+        return true;
+
+    return false;
+}
+
+function filterResourceContainers(structure) {
+    if(structure.structureType == STRUCTURE_CONTAINER && structure.pos.findInRange(FIND_SOURCES, 1).length > 0)
         return true;
 
     return false;

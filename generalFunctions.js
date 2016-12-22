@@ -1,4 +1,4 @@
-require('prototype.spawn')();
+require('SpawnFunctions')();
 //var consts = require('Constants');
 //var roleHarvester = require('role.harvester');
 //var roleUpgrader = require('role.upgrader');

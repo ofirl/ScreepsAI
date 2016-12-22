@@ -9,8 +9,7 @@ var RoomManager = require('RoomManager');
 module.exports.loop = function  () {
     // clear memory
     generalFunctions.clearMemory();
-
-
+    
     // init rooms
     for(var i = 0; i < Memory.rooms.length; i++){
         var n = Memory.rooms[i];
@@ -33,6 +32,7 @@ module.exports.loop = function  () {
             ', population: ' +
             room.population.getTotalPopulation() + '/' + room.population.getMaxPopulation() +
             ' (' + room.population.getType('CreepMiner').total + '/' +
+            room.population.getType('CreepLorry').total + '/' +
             room.population.getType('CreepBuilder').total + '/' +
             room.population.getType('CreepCarrier').total + '/' +
             //room.population.getType('CreepSoldier').total +

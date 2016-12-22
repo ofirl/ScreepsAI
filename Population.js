@@ -14,6 +14,14 @@ function Population(room) {
 			max: 5,
 			minExtensions: 0
 		},
+        CreepLorry: {
+            type : 'CreepLorry',
+            total: 0,
+            goalPercentage: 0.25,
+            currentPercentage: 0,
+            max: 2,
+            minExtensions: 0
+        },
 		CreepBuilder: {
             type : 'CreepBuilder',
 			total: 0,
@@ -22,14 +30,14 @@ function Population(room) {
 			max: 15,
 			minExtensions: 0
 		},
-		CreepCarrier: {
+        CreepCarrier: {
             type : 'CreepCarrier',
-			total: 0,
-			goalPercentage: 0.3,
-			currentPercentage: 0,
-			max: 15,
-			minExtensions: 0
-		},/*
+            total: 0,
+            goalPercentage: 0.3,
+            currentPercentage: 0,
+            max: 15,
+            minExtensions: 0
+        },/*
 		CreepHealer: {
             type : 'CreepHealer',
 			total: 0,
@@ -75,6 +83,7 @@ function Population(room) {
 Population.prototype.goalsMet = function() {
     for(var t in this.typeDistribution) {
         var type = this.typeDistribution[t];
+        Memory.test2 = type;
 		if((type.currentPercentage < (type.goalPercentage - type.goalPercentage/4) && type.total < type.max) || type.total == 0  || type.total < type.max*0.75) {
 			return false;
 		}
@@ -89,12 +98,9 @@ Population.prototype.getType = function(type) {
 
 Population.prototype.getTypes = function() {
 	var types = [];
-	types.push(this.typeDistribution.CreepMiner);
-	types.push(this.typeDistribution.CreepBuilder);
-	types.push(this.typeDistribution.CreepCarrier);
-    /*for(var t in this.typeDistribution)
+    for(var t in this.typeDistribution)
 		types.push(this.typeDistribution[t]);
-	*/
+
 	return types;
 };
 
@@ -108,7 +114,7 @@ Population.prototype.getMaxPopulation = function() {
 		function() {
 			var population = 0;
             for(var t in this.typeDistribution)
-				population += this.typeDistribution[t].max;
+                population += this.typeDistribution[t].max;
 
 			return population;
 		}.bind(this)
@@ -131,6 +137,22 @@ Population.prototype.getNextExpectedDeath = function() {
 	);
 };
 
+Population.prototype.spawnedAllEssentialRoles = function() {
+    return this.cache.remember(
+        'all-roles',
+        function() {
+            if (this.typeDistribution.CreepMiner.total == 0)
+                return false;
+            if (this.typeDistribution.CreepLorry.total == 0)
+                return false
+            if (this.typeDistribution.CreepCarrier.total == 0)
+                return false;
+
+            return true;
+        }.bind(this)
+    );
+};
+        
 module.exports = Population;
 
 // Private
