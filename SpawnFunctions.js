@@ -17,6 +17,9 @@ module.exports = function() {
                 case Constants.ROLE_BUILDER :
                     this.spawnBuilder(energy);
                     break;
+                case Constants.ROLE_LONG_DISTANCE_MINER :
+                    this.spawnLongDistanceMiner(energy);
+                    break;
             }
         };
 
@@ -41,8 +44,6 @@ module.exports = function() {
     StructureSpawn.prototype.spawnLorry =
         function(energy) {
             var carryParts = Math.min(Math.floor((energy - 50) / 100), Constants.MAX_CARRY_PARTS);
-            console.log(energy);
-            console.log(carryParts);
             if (carryParts == 0)
                 return ERR_NOT_ENOUGH_ENERGY;
             var body = [];
@@ -93,7 +94,27 @@ module.exports = function() {
                 body.push(MOVE);
 
             logSpawn(this, body, roleName);
-        }
+        };
+
+    StructureSpawn.prototype.spawnLongDistanceMiner =
+        function(energy) {
+            energy = Math.min(Constants.maxCreepCost, energy);
+            var numberOfParts = Math.floor(energy/200);
+            if (numberOfParts == 0)
+                return ERR_NOT_ENOUGH_ENERGY;
+
+            var body = [];
+            var roleName = Constants.ROLE_LONG_DISTANCE_MINER;
+
+            for (let i = 0; i < numberOfParts; i++)
+                body.push(WORK);
+            for (let i = 0; i < numberOfParts; i++)
+                body.push(CARRY);
+            for (let i = 0; i < numberOfParts; i++)
+                body.push(MOVE);
+
+            logSpawn(this, body, roleName);
+        };
 };
 
 // private

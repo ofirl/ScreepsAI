@@ -27,9 +27,11 @@ Resources.prototype.getAvailableResource = function() {
 
 	return srcs[srcIndex];
 };
+
 Resources.prototype.getResourceById = function(id) {
 	return Game.getObjectById(id);
 };
+
 Resources.prototype.getSources = function(room) {
 	return this.cache.remember(
 		'sources',
@@ -48,6 +50,25 @@ Resources.prototype.getSources = function(room) {
 			);
 		}.bind(this)
 	);
+};
+
+Resources.prototype.getLonelyLongDistanceMiningRoom = function() {
+    var rooms = Memory.longDistanceMiningRooms;
+    var taken = [];
+    for (var i = 0 ; i < this.population.creeps.length; i++)
+    {
+        var creep = this.population.creeps[i];
+        var roomTaken = creep.memory['targetRoom'];
+        if (roomTaken)
+            taken.push(roomTaken);
+    }
+    for (var i = 0; i < rooms.length; i++) {
+        var room = rooms[i];
+        if (taken.indexOf(room) == -1)
+            return room;
+    }
+
+    return false;
 };
 
 module.exports = Resources;

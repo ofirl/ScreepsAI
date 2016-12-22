@@ -37,6 +37,14 @@ function Population(room) {
             currentPercentage: 0,
             max: 15,
             minExtensions: 0
+        },
+        CreepLongDistanceMiner: {
+            type : 'CreepLongDistanceMiner',
+            total: 0,
+            goalPercentage: 0.3,
+            currentPercentage: 0,
+            max: 1,
+            minExtensions: 0
         },/*
 		CreepHealer: {
             type : 'CreepHealer',
@@ -63,7 +71,7 @@ function Population(room) {
 			minExtensions: 10
 		}*/
 	};
-
+    
     this.creeps = this.room.find(FIND_MY_CREEPS);
     for(var i = 0; i < this.creeps.length; i++) {
         var creep = this.creeps[i];
@@ -74,6 +82,13 @@ function Population(room) {
         this.typeDistribution[creepType].total++;
     }
 
+    for (let creep in Game.creeps)
+        if (Game.creeps[creep].memory.role == 'CreepLongDistanceMiner')
+            this.typeDistribution.CreepLongDistanceMiner.total++;
+    /*this.typeDistribution.CreepLongDistanceMiner.total = Game.find(FIND_MY_CREEPS, {
+        filter : (c) => c.memory.role == 'CreepLongDistanceMining'
+    }).length;*/
+
     for(var t in this.typeDistribution) {
         var curr = this.typeDistribution[t];
         this.typeDistribution[t].currentPercentage = curr.total / this.getTotalPopulation();
@@ -83,7 +98,7 @@ function Population(room) {
 Population.prototype.goalsMet = function() {
     for(var t in this.typeDistribution) {
         var type = this.typeDistribution[t];
-		if((type.currentPercentage < (type.goalPercentage - type.goalPercentage/4) && type.total < type.max) || type.total == 0  || type.total < type.max*0.75) {
+		if(type.total < type.max) {
 			return false;
 		}
 	}

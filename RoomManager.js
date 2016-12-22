@@ -17,6 +17,7 @@ function roomManager(room, roomHandler, buildQueue) {
     this.constructionManager = new Constructions(this.room, buildQueue);
     this.population.typeDistribution.CreepBuilder.max = 4;
     this.population.typeDistribution.CreepMiner.max = this.resourceManager.getSources().length;
+    this.population.typeDistribution.CreepLongDistanceMiner.max = 1;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;
     this.population.typeDistribution.CreepCarrier.max = 2;
     this.population.typeDistribution.CreepLorry.max = this.resourceManager.getSources().length;

@@ -8,6 +8,7 @@ const ROLE_MINER = 'CreepMiner';
 const ROLE_LORRY = 'CreepLorry';
 const ROLE_CARRIER = 'CreepCarrier';
 const ROLE_BUILDER = 'CreepBuilder';
+const ROLE_LONG_DISTANCE_MINER = 'CreepLongDistanceMiner';
 const MAX_WORK_PARTS = 5;
 const MAX_CARRY_PARTS = 3;
 
@@ -38,6 +39,7 @@ module.exports = {
     ROLE_LORRY: ROLE_LORRY,
     ROLE_CARRIER : ROLE_CARRIER,
     ROLE_BUILDER : ROLE_BUILDER,
+    ROLE_LONG_DISTANCE_MINER : ROLE_LONG_DISTANCE_MINER,
     MAX_WORK_PARTS : MAX_WORK_PARTS,
     MAX_CARRY_PARTS : MAX_CARRY_PARTS,
 };

@@ -15,14 +15,21 @@ module.exports.loop = function  () {
         //var n = Memory.rooms[room].name;
         var room = Memory.rooms[i];
         var n = room.name;
+        if (Game.rooms[n] == undefined)
+            continue;
+        
         var roomHandler = new RoomManager(Game.rooms[n], RoomHandler, room.buildQueue);
         RoomHandler.set(Game.rooms[n], roomHandler);
+
     }
 
     // Load rooms
     var rooms = RoomHandler.getRoomHandlers();
     for(var room in Memory.rooms){
         var n = Memory.rooms[room].name;
+        if (Game.rooms[n] == undefined)
+            continue;
+
         var room = rooms[Game.rooms[n]];
         room.loadCreeps();
         room.populate();
