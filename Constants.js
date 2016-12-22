@@ -34,10 +34,10 @@ module.exports = {
     minBuildersForUpgraders : minBuildersForUpgraders,
     numUpgraders : numUpgraders,
 
-    ROLE_MINER : 'CreepMiner',
-    ROLE_LORRY: 'CreepLorry',
-    ROLE_CARRIER : 'CreepCarrier',
-    ROLE_BUILDER : 'CreepBuilder',
-    MAX_WORK_PARTS : 5,
-    MAX_CARRY_PARTS : 2,
+    ROLE_MINER : ROLE_MINER,
+    ROLE_LORRY: ROLE_LORRY,
+    ROLE_CARRIER : ROLE_CARRIER,
+    ROLE_BUILDER : ROLE_BUILDER,
+    MAX_WORK_PARTS : MAX_WORK_PARTS,
+    MAX_CARRY_PARTS : MAX_CARRY_PARTS,
 };

@@ -5,7 +5,7 @@ var Resources = require('Resources');
 var Constructions = require('Constructions');
 var Constants = require('Constants');
 
-function roomManager(room, roomHandler) {
+function roomManager(room, roomHandler, buildQueue) {
     this.room = room;
     this.roomHandler = roomHandler;
     this.creeps = [];
@@ -14,7 +14,7 @@ function roomManager(room, roomHandler) {
     this.population = new Population(this.room);
     this.depositManager = new Deposits(this.room);
     this.resourceManager = new Resources(this.room, this.population);
-    this.constructionManager = new Constructions(this.room);
+    this.constructionManager = new Constructions(this.room, buildQueue);
     this.population.typeDistribution.CreepBuilder.max = 4;
     this.population.typeDistribution.CreepMiner.max = this.resourceManager.getSources().length;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;

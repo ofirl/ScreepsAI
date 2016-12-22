@@ -1,20 +1,40 @@
 var CONST = {
     RAMPART_MAX: 1,
-    RAMPART_FIX: 0.50,
-    STANDARD_FIX: 0.50,
-    STANDARD_MAX : 0.90,
+    RAMPART_FIX: 0.90,
+    STANDARD_FIX: 0.90,
+    STANDARD_MAX : 1,
 };
 var Cache = require('Cache');
 
-function Constructions(room) {
+function Constructions(room, buildQueue) {
     this.room = room;
+    this.buildQueue = buildQueue;
+    this.buildQueueObjects = [];
     this.cache = new Cache();
     this.sites = this.room.find(FIND_CONSTRUCTION_SITES);
     this.structures = this.room.find(FIND_MY_STRUCTURES);
     this.towers = this.room.find(FIND_STRUCTURES, { filter : (s) => s.structureType == STRUCTURE_TOWER});
     this.walls = this.room.find(FIND_STRUCTURES, { filter : (s) => s.structureType == STRUCTURE_WALL});
     this.damagedStructures = this.getDamagedStructures();
-    this.upgradeableStructures = this.getUpgradeableStructures();
+    if (this.damagedStructures.length > 0) {
+        for (var i = 0; i < this.damagedStructures.length; i++)
+            this.addToBuildQueue(this.damagedStructures[i].id);
+    }
+    for (var i = 0; i < this.buildQueue.length; i++) {
+        var id = this.buildQueue[i];
+        var changed = false;
+        var object = Game.getObjectById(id);
+        if (object.hits == object.hitsMax) {
+            this.removeFromBuildQueue(object.id);
+            changed = true;
+        }
+        else
+            this.buildQueueObjects.push(object);
+    }
+    if (changed)
+        this.saveBuildQueueToMemory();
+
+    //this.upgradeableStructures = this.getUpgradeableStructures();
     this.controller = this.room.controller;
 };
 
@@ -103,8 +123,8 @@ Constructions.prototype.constructStructure = function(creep) {
         build = true;
         //creep.creep.say('build');
     }
-    else if(this.upgradeableStructures.length != 0) {
-        site = creep.creep.pos.findClosestByPath(this.upgradeableStructures);
+    else if(this.buildQueueObjects.length != 0) {
+        site = creep.creep.pos.findClosestByPath(this.buildQueueObjects);
         //creep.creep.say('repair');
     }
     
@@ -160,6 +180,29 @@ Constructions.prototype.getDamagedWalls = function() {
             return walls;
         }.bind(this)
     );
+};
+
+Constructions.prototype.addToBuildQueue = function(id) {
+    if (this.buildQueue.indexOf(id) == -1) {
+        this.buildQueue.push(id);
+        this.saveBuildQueueToMemory();
+    }
+};
+
+Constructions.prototype.removeFromBuildQueue = function(id) {
+    var index = this.buildQueue.indexOf(id);
+    if (index != -1) {
+        this.buildQueue.splice(index, 1);
+        this.saveBuildQueueToMemory();
+    }
+};
+
+Constructions.prototype.saveBuildQueueToMemory = function(id) {
+    for (let room in Memory.rooms) {
+        if (room.name == this.room.name) {
+            room.buildQueue = this.buildQueue;
+        }
+    }
 };
 
 module.exports = Constructions;

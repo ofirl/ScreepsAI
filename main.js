@@ -11,16 +11,18 @@ module.exports.loop = function  () {
     generalFunctions.clearMemory();
     
     // init rooms
-    for(var i = 0; i < Memory.rooms.length; i++){
-        var n = Memory.rooms[i];
-        var roomHandler = new RoomManager(Game.rooms[n], RoomHandler);
+    for(let i in Memory.rooms){
+        //var n = Memory.rooms[room].name;
+        var room = Memory.rooms[i];
+        var n = room.name;
+        var roomHandler = new RoomManager(Game.rooms[n], RoomHandler, room.buildQueue);
         RoomHandler.set(Game.rooms[n], roomHandler);
     }
 
     // Load rooms
     var rooms = RoomHandler.getRoomHandlers();
-    for(var i = 0; i < Memory.rooms.length; i++){
-        var n = Memory.rooms[i];
+    for(var room in Memory.rooms){
+        var n = Memory.rooms[room].name;
         var room = rooms[Game.rooms[n]];
         room.loadCreeps();
         room.populate();

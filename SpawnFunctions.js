@@ -41,6 +41,8 @@ module.exports = function() {
     StructureSpawn.prototype.spawnLorry =
         function(energy) {
             var carryParts = Math.min(Math.floor((energy - 50) / 100), Constants.MAX_CARRY_PARTS);
+            console.log(energy);
+            console.log(carryParts);
             if (carryParts == 0)
                 return ERR_NOT_ENOUGH_ENERGY;
             var body = [];
@@ -79,7 +81,7 @@ module.exports = function() {
             var numberOfParts = Math.floor(energy/200);
             if (numberOfParts == 0)
                 return ERR_NOT_ENOUGH_ENERGY;
-            
+
             var body = [];
             var roleName = Constants.ROLE_BUILDER;
 

@@ -83,7 +83,6 @@ function Population(room) {
 Population.prototype.goalsMet = function() {
     for(var t in this.typeDistribution) {
         var type = this.typeDistribution[t];
-        Memory.test2 = type;
 		if((type.currentPercentage < (type.goalPercentage - type.goalPercentage/4) && type.total < type.max) || type.total == 0  || type.total < type.max*0.75) {
 			return false;
 		}
