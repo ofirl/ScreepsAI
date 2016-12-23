@@ -59,10 +59,11 @@ creepBuilder.prototype.act = function() {
         
         if (source && source.transfer(this.creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
             this.creep.moveTo(source);
-
-        source = this.creep.pos.findClosestByPath(this.resourceManager.getSources());
-        if (this.creep.harvest(source) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(source);
+        else {
+            source = this.creep.pos.findClosestByPath(this.resourceManager.getSources());
+            if (this.creep.harvest(source) == ERR_NOT_IN_RANGE)
+                this.creep.moveTo(source);
+        }
     }
     // creep should build
     else {

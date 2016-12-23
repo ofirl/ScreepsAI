@@ -67,13 +67,8 @@ creepMiner.prototype.act = function() {
     }
     // creep should deposit
     else {
-        var storage = this.creep.pos.findClosestByPath(this.depositManager.extensions.concat(this.depositManager.spawns), {filter: minerStructureFilter});
-        if (storage != undefined) {
-            if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(storage);
-        }
-        else {
-            storage = this.creep.pos.findClosestByPath(this.depositManager.getAvailableContainersToDeposit());
+        if (this.resourceManager.population.typeDistribution.CreepCarrier.total > 0) {
+            var storage = this.creep.pos.findClosestByPath(this.depositManager.getAvailableContainersToDeposit());
             if (storage != undefined) {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
                     this.creep.moveTo(storage);
@@ -81,6 +76,13 @@ creepMiner.prototype.act = function() {
             else {
                 if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
                     this.creep.moveTo(this.creep.room.controller);
+            }
+        }
+        else {
+            var storage = this.creep.pos.findClosestByPath(this.depositManager.extensions.concat(this.depositManager.spawns), {filter: minerStructureFilter});
+            if (storage != undefined) {
+                if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                    this.creep.moveTo(storage);
             }
         }
     }

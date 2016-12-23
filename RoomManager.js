@@ -18,12 +18,16 @@ function roomManager(room, roomHandler, buildQueue) {
     this.constructionManager = new Constructions(this.room, buildQueue);
     this.defenseManager = new DefenseManager(this.room);
     this.population.typeDistribution.CreepBuilder.max = 4;
+    if (this.room.storage)
+        this.population.typeDistribution.CreepBuilder.max += Math.floor(this.room.storage.store.energy / 250000);
     this.population.typeDistribution.CreepMiner.max = this.resourceManager.getSources().length;
     this.population.typeDistribution.CreepLongDistanceMiner.max = 1;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;
     this.population.typeDistribution.CreepCarrier.max = 2;
+    if (this.room.storage)
+        this.population.typeDistribution.CreepCarrier.max += Math.floor(this.room.storage.store.energy / 250000);
     this.population.typeDistribution.CreepLorry.max = this.resourceManager.getSources().length;
-    this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.population, this.roomHandler);
+    this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.defenseManager, this.population, this.roomHandler);
 }
 
 roomManager.prototype.loadCreeps = function() {
@@ -111,7 +115,8 @@ roomManager.prototype.populate = function() {
             for(var i = 0; i < types.length; i++) {
                 var ctype = types[i];
                 if(this.depositManager.deposits.length > ctype.minExtensions &&
-                    (!ctype.requireStorage || ctype.requireStorage && this.room.storage != undefined)) {
+                    (!ctype.requireStorage || ctype.requireStorage && this.room.storage != undefined) &&
+                    (!ctype.requireContainer || ctype.requireContainer && this.depositManager.resourceContainers.length > 0)) {
                     if(ctype.total < ctype.max) {
                         this.creepFactory.new(ctype.type, this.depositManager.getSpawnDeposit());
                         break;

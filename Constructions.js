@@ -24,8 +24,8 @@ function Constructions(room, buildQueue) {
         var id = this.buildQueue[i];
         var changed = false;
         var object = Game.getObjectById(id);
-        if (object.hits == object.hitsMax) {
-            this.removeFromBuildQueue(object.id);
+        if (object == null || object.hits == object.hitsMax) {
+            this.removeFromBuildQueue(id);
             changed = true;
         }
         else

@@ -8,10 +8,11 @@ var ACTIONS = {
     WITHDRAW : 2,
 };
 
-function creepCarrier(creep, constructionsManager, depositManager) {
+function creepCarrier(creep, constructionsManager, depositManager, defenseManager) {
     this.creep = creep;
     this.constructionsManager = constructionsManager;
     this.depositManager = depositManager;
+    this.defenseManager = defenseManager;
 };
 
 creepCarrier.prototype.init = function() {
@@ -62,37 +63,45 @@ creepCarrier.prototype.act = function() {
     }
     // creep should deposit
     else {
-        var target = this.creep.pos.findClosestByPath(this.constructionsManager.getNotFullTowers());
+        // find not full extensions/spawn
+        var target = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToDeposit());
         if (target != null) {
             if (this.creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
                 this.creep.moveTo(target);
+
+            return;
         }
-        else {
-            target = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToDeposit());
-            if (target != null) {
-                if (this.creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                    this.creep.moveTo(target);
-            }
-            else {
-                target = this.constructionsManager.getDamagedWalls();
-                if (target != null) {
-                    var wallId = this.remember('repair-wall', target.id);
-                    if (wallId == 0) {
-                        var random = Math.floor(Math.random() * Math.min(CONSTANTS.PARALLEL_WALL_REPAIR, target.length));
-                        target = target[random];
-                        this.remember('repair-wall', target.id);
-                    }
-                    else
-                        target = this.constructionsManager.getConstructionSiteById(wallId);
-                    if (this.creep.repair(target) == ERR_NOT_IN_RANGE)
-                        this.creep.moveTo(target);
-                }
-                else {
-                    if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
-                        this.creep.moveTo(this.creep.room.controller);
-                }
-            }
+
+        // find not full towers
+        target = this.creep.pos.findClosestByPath(this.constructionsManager.getNotFullTowers());
+        if (target != null) {
+            if (this.creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                this.creep.moveTo(target);
+
+                return;
         }
+
+        // find damaged walls
+        target = this.constructionsManager.getDamagedWalls();
+        if (target != null) {
+            var wallId = this.remember('repair-wall', target.id);
+            if (wallId == 0) {
+                var random = Math.floor(Math.random() * Math.min(CONSTANTS.PARALLEL_WALL_REPAIR, target.length));
+                target = target[random];
+                this.remember('repair-wall', target.id);
+            }
+            else
+                target = this.constructionsManager.getConstructionSiteById(wallId);
+
+            if (this.creep.repair(target) == ERR_NOT_IN_RANGE)
+                this.creep.moveTo(target);
+
+            return;
+        }
+
+        // upgrade controller - if happens i'm in a very good shape
+        if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
+            this.creep.moveTo(this.creep.room.controller);
     }
 };
 

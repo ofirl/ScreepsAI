@@ -12,7 +12,9 @@ function Population(room) {
 			goalPercentage: 0.2,
 			currentPercentage: 0,
 			max: 5,
-			minExtensions: 0
+			minExtensions: 0,
+            requireStorage : false,
+            requireContainer : false
 		},
         CreepLorry: {
             type : 'CreepLorry',
@@ -21,7 +23,8 @@ function Population(room) {
             currentPercentage: 0,
             max: 2,
             minExtensions: 0,
-            requireStorage : true
+            requireStorage : true,
+            requireContainer : true
         },
 		CreepBuilder: {
             type : 'CreepBuilder',
@@ -29,7 +32,9 @@ function Population(room) {
 			goalPercentage: 0.25,
 			currentPercentage: 0,
 			max: 15,
-			minExtensions: 0
+			minExtensions: 0,
+            requireStorage : false,
+            requireContainer : false
 		},
         CreepCarrier: {
             type : 'CreepCarrier',
@@ -38,7 +43,8 @@ function Population(room) {
             currentPercentage: 0,
             max: 15,
             minExtensions: 0,
-            requireStorage : true
+            requireStorage : false,
+            requireContainer : true
         },
         CreepLongDistanceMiner: {
             type : 'CreepLongDistanceMiner',
@@ -47,7 +53,8 @@ function Population(room) {
             currentPercentage: 0,
             max: 1,
             minExtensions: 0,
-            requireStorage : true
+            requireStorage : true,
+            requireContainer : false
         },/*
 		CreepHealer: {
             type : 'CreepHealer',
@@ -55,7 +62,8 @@ function Population(room) {
 			goalPercentage: 0.25,
 			currentPercentage: 0,
 			max: 2,
-			minExtensions: 2
+			minExtensions: 2,
+            requireStorage : false
 		},
 		CreepSoldier: {
             type : 'CreepSoldier',
@@ -63,7 +71,8 @@ function Population(room) {
 			goalPercentage: 0.25,
 			currentPercentage: 0,
 			max: 5,
-			minExtensions: 2
+			minExtensions: 2,
+            requireStorage : false
 		},
 		CreepShooter: {
             type : 'CreepShooter',
@@ -71,7 +80,8 @@ function Population(room) {
 			goalPercentage: 0.2,
 			currentPercentage: 0,
 			max: 3,
-			minExtensions: 10
+			minExtensions: 10,
+            requireStorage : false
 		}*/
 	};
     
@@ -181,6 +191,7 @@ function createTypeDistribution(creepType) {
 		goalPercentage: 0.1,
 		currentPercentage: 0,
 		max: 1,
-        requireStorage : false
+        requireStorage : false,
+        requireContainer : false
 	};
 };
