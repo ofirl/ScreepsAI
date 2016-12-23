@@ -3,6 +3,7 @@ var CreepFactory = require('CreepFactory');
 var Population = require('Population');
 var Resources = require('Resources');
 var Constructions = require('Constructions');
+var DefenseManager = require('DefenseManager');
 var Constants = require('Constants');
 
 function roomManager(room, roomHandler, buildQueue) {
@@ -15,6 +16,7 @@ function roomManager(room, roomHandler, buildQueue) {
     this.depositManager = new Deposits(this.room);
     this.resourceManager = new Resources(this.room, this.population);
     this.constructionManager = new Constructions(this.room, buildQueue);
+    this.defenseManager = new DefenseManager(this.room);
     this.population.typeDistribution.CreepBuilder.max = 4;
     this.population.typeDistribution.CreepMiner.max = this.resourceManager.getSources().length;
     this.population.typeDistribution.CreepLongDistanceMiner.max = 1;
@@ -120,35 +122,9 @@ roomManager.prototype.populate = function() {
     }
 };
 
-roomManager.prototype.OperateTowers = function() {
-    var hostiles = this.room.find(FIND_HOSTILE_CREEPS);
-    if (hostiles.length > 0) {
-        // if hostiles found
-        var towers = this.room.find(FIND_MY_STRUCTURES, {
-            filter : (s) => s.structureType == STRUCTURE_TOWER
-        });
-        for (let tower of towers) {
-            var target = tower.pos.findClosestByRange(hostiles);
-            tower.attack(target);
-        }
-    }
-    else {
-        var damagedCreeps = this.room.find(FIND_MY_CREEPS, {
-            filter : (c) => c.hits < c.hitsMax
-        });
-        // if damaged friendly creeps found
-        if (damagedCreeps.length > 0) {
-            var towers = this.room.find(FIND_MY_STRUCTURES, {
-                filter : (s) => s.structureType == STRUCTURE_TOWER
-            });
-            for (let tower of towers) {
-                var target = tower.pos.findClosestByRange(damagedCreeps);
-                tower.heal(target);
-            }
-        }
-
-    }
-};
+roomManager.prototype.defend = function() {
+    this.defenseManager.operateTowers();
+}
 
 /*
  Room.prototype.distributeCarriers = function() {

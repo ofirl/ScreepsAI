@@ -32,6 +32,7 @@ module.exports.loop = function  () {
         var room = rooms[Game.rooms[n]];
         room.loadCreeps();
         room.populate();
+        room.defend();
 
         console.log(
             room.room.name + ' | ' +
@@ -52,7 +53,7 @@ module.exports.loop = function  () {
     };
 
     //operate towers
-    generalFunctions.operateTowers();
+    //generalFunctions.operateTowers();
 
     //move claim creeps
     for (let c in Game.creeps) {
