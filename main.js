@@ -6,7 +6,16 @@ var generalFunctions = require('generalFunctions');
 var RoomHandler = require('RoomHandler');
 var RoomManager = require('RoomManager');
 
+// profiler setup
+const profiler = require('profiler');
+//profiler enable - comment out if not used
+//profiler.enable();
+
 module.exports.loop = function  () {
+    profiler.wrap(function() {
+        // Main.js logic should go here.
+
+
     // clear memory
     generalFunctions.clearMemory();
     
@@ -25,7 +34,8 @@ module.exports.loop = function  () {
     // Load rooms
     var rooms = RoomHandler.getRoomHandlers();
     for(var room in Memory.rooms){
-        var n = Memory.rooms[room].name;
+        var roomMemoryObject = Memory.rooms[room];
+        var n = roomMemoryObject.name;
         if (Game.rooms[n] == undefined)
             continue;
 
@@ -33,6 +43,9 @@ module.exports.loop = function  () {
         room.loadCreeps();
         room.populate();
         room.defend();
+
+        if (!roomMemoryObject.report)
+            continue;
 
         console.log(
             room.room.name + ' | ' +
@@ -63,4 +76,7 @@ module.exports.loop = function  () {
 
         generalFunctions.runClaimers(creep);
     }
+
+
+    });
 };

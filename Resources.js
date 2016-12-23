@@ -1,4 +1,9 @@
 var Cache = require('Cache');
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(Resources, 'Resources');
+
 function Resources(room, population) {
 	this.cache = new Cache();
 	this.room = room;

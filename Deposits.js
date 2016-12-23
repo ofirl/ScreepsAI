@@ -4,6 +4,10 @@ var CONSTS = {
 	EMPTY_LEVEL: 0.5,
 };
 
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(Deposits, 'Deposits');
+
 function Deposits(room) {
 	this.cache = new Cache();
 	this.room = room;
@@ -122,8 +126,8 @@ Deposits.prototype.energy = function() {
 			for(var i = 0; i < this.deposits.length; i++)
 				energy += this.deposits[i].energy;
 
-			for(var i = 0; i < this.spawns.length; i++)
-				energy += this.spawns[i].energy;
+			/*for(var i = 0; i < this.spawns.length; i++)
+				energy += this.spawns[i].energy;*/
 
 			return energy;
 		}.bind(this)

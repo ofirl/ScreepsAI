@@ -98,7 +98,8 @@ module.exports = function() {
 
     StructureSpawn.prototype.spawnLongDistanceMiner =
         function(energy) {
-            energy = Math.min(Constants.maxCreepCost, energy);
+            //energy = Math.min(Constants.maxCreepCost, energy);
+            energy = Math.min(2000, energy);
             var numberOfParts = Math.floor(energy/200);
             if (numberOfParts == 0)
                 return ERR_NOT_ENOUGH_ENERGY;

@@ -4,6 +4,10 @@ var roomHandlers = {};
 
 var RoomHandler = {};
 
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(RoomHandler, 'RoomHandler');
+
 RoomHandler.set = function(name, handler) {
     rooms.push(name);
     roomHandlers[name] = handler;

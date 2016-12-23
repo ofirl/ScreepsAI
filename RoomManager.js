@@ -6,6 +6,10 @@ var Constructions = require('Constructions');
 var DefenseManager = require('DefenseManager');
 var Constants = require('Constants');
 
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(roomManager, 'RoomManager');
+
 function roomManager(room, roomHandler, buildQueue) {
     this.room = room;
     this.roomHandler = roomHandler;
@@ -21,7 +25,7 @@ function roomManager(room, roomHandler, buildQueue) {
     if (this.room.storage)
         this.population.typeDistribution.CreepBuilder.max += Math.floor(this.room.storage.store.energy / 250000);
     this.population.typeDistribution.CreepMiner.max = this.resourceManager.getSources().length;
-    this.population.typeDistribution.CreepLongDistanceMiner.max = 1;
+    this.population.typeDistribution.CreepLongDistanceMiner.max = 0;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;
     this.population.typeDistribution.CreepCarrier.max = 2;
     if (this.room.storage)
@@ -63,7 +67,7 @@ roomManager.prototype.distributeBuilders = function() {
             if(creep.remember('role') != 'CreepBuilder')
                 continue;
 
-            creep.remember('force-controller-upgrade', c > Constants.numUpgraders);
+            creep.remember('force-controller-upgrade', c < Constants.numUpgraders);
             c++;
         }
     }

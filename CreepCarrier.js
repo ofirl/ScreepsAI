@@ -8,6 +8,10 @@ var ACTIONS = {
     WITHDRAW : 2,
 };
 
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(creepCarrier, 'CreepCarrier');
+
 function creepCarrier(creep, constructionsManager, depositManager, defenseManager) {
     this.creep = creep;
     this.constructionsManager = constructionsManager;
@@ -84,14 +88,22 @@ creepCarrier.prototype.act = function() {
         // find damaged walls
         target = this.constructionsManager.getDamagedWalls();
         if (target != null) {
-            var wallId = this.remember('repair-wall', target.id);
-            if (wallId == 0) {
+            var newWallNeeded = false;
+            var wallId = this.remember('repair-wall');
+
+            if (wallId != 0) {
+                target = this.constructionsManager.getConstructionSiteById(wallId);
+                if (target == null || (target && target.hits == target.hitsMax))
+                    newWallNeeded = true;
+            }
+            else
+                newWallNeeded = true;
+
+            if (newWallNeeded) {
                 var random = Math.floor(Math.random() * Math.min(CONSTANTS.PARALLEL_WALL_REPAIR, target.length));
                 target = target[random];
                 this.remember('repair-wall', target.id);
             }
-            else
-                target = this.constructionsManager.getConstructionSiteById(wallId);
 
             if (this.creep.repair(target) == ERR_NOT_IN_RANGE)
                 this.creep.moveTo(target);

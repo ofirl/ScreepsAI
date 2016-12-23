@@ -1,10 +1,15 @@
 var CONST = {
     RAMPART_MAX: 1,
-    RAMPART_FIX: 0.90,
+    RAMPART_FIX: 0.30,
     STANDARD_FIX: 0.90,
     STANDARD_MAX : 1,
 };
 var Cache = require('Cache');
+
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(Constructions.prototype, 'Constructions');
 
 function Constructions(room, buildQueue) {
     this.room = room;
@@ -37,7 +42,6 @@ function Constructions(room, buildQueue) {
     //this.upgradeableStructures = this.getUpgradeableStructures();
     this.controller = this.room.controller;
 };
-
 
 Constructions.prototype.getDamagedStructures = function() {
     return this.cache.remember(

@@ -1,3 +1,7 @@
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(DefenseManager, 'DefenseManager');
+
 function DefenseManager(room) {
     this.room = room;
     this.towers = this.room.find(

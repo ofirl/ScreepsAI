@@ -1,6 +1,11 @@
 var CreepBase = {};
 var Cache = require('Cache');
 var universalCache = new Cache();
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(CreepBase, 'CreepBase');
+
 CreepBase.remember = function(key, value) {
     if(value === undefined) {
         return this.creep.memory[key];

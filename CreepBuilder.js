@@ -5,6 +5,10 @@ var ACTIONS = {
     WITHDRAW: 2
 };
 
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(creepBuilder, 'CreepBuilder');
+
 function creepBuilder(creep, constructionsManager, depositManager, resourceManager) {
     this.creep = creep;
     this.constructionsManager = constructionsManager;
@@ -54,12 +58,12 @@ creepBuilder.prototype.act = function() {
     // creep should withdraw energy
     if (this.remember('last-action') == ACTIONS.WITHDRAW) {
         var source = this.depositManager.storage;
-        if (!source)
+        if (!source || (source && source.store.energy == 0))
             source = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToWithdraw());
         
         if (source && source.transfer(this.creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
             this.creep.moveTo(source);
-        else {
+        else if (!source || source  == null || source == undefined){
             source = this.creep.pos.findClosestByPath(this.resourceManager.getSources());
             if (this.creep.harvest(source) == ERR_NOT_IN_RANGE)
                 this.creep.moveTo(source);

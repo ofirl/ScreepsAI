@@ -5,6 +5,10 @@ var ACTIONS = {
     DEPOSIT: 2
 };
 
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(creepMiner, 'CreepMiner');
+
 function creepMiner(creep, resourceManager, depositManager) {
     this.cache = new Cache();
     this.creep = creep;
