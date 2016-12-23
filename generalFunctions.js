@@ -1,4 +1,6 @@
 require('SpawnFunctions')();
+var CreepClaimer = require('CreepClaimer');
+var CreepBase = require('CreepBase');
 //var consts = require('Constants');
 //var roleHarvester = require('role.harvester');
 //var roleUpgrader = require('role.upgrader');
@@ -41,6 +43,14 @@ generalFunctions.operateTowers = function () {
         if (target != undefined)
             tower.attack(target);
     }
+};
+
+// operate claimers
+generalFunctions.runClaimers = function (creep) {
+    var claimer = new CreepClaimer(creep);
+    generalFunctions.extend(claimer, CreepBase);
+    
+    claimer.init();
 };
 
 module.exports = generalFunctions;

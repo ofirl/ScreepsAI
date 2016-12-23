@@ -17,9 +17,6 @@ function creepLorry(creep, depositManager, resourceManager) {
 creepLorry.prototype.init = function() {
     if (!this.remember('source-container'))
         this.remember('source-container', this.depositManager.getLonelyContainer(this.resourceManager.population.creeps, 'CreepLorry').id);
-    
-    if (!this.remember('repair-wall'))
-        this.remember('repair-wall', 0);
 
     if(!this.remember('srcRoom')) {
         this.remember('srcRoom', this.creep.room.name);

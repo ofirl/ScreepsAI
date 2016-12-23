@@ -44,8 +44,8 @@ creepMiner.prototype.init = function() {
 creepMiner.prototype.act = function() {
     // creep carry is full
     if (this.remember('last-action') == ACTIONS.HARVEST && this.creep.carry.energy == this.creep.carryCapacity &&
-        !this.resourceManager.population.spawnedAllEssentialRoles() &&
-        (this.container != undefined && this.container.store.energy == this.container.storeCapacity))
+        (!this.resourceManager.population.spawnedAllEssentialRoles() || this.depositManager.room.storage == undefined ||
+        (this.container != undefined && this.container.store.energy == this.container.storeCapacity)))
         this.remember('last-action', ACTIONS.DEPOSIT);
 
     // creep finished depositing
@@ -77,6 +77,10 @@ creepMiner.prototype.act = function() {
             if (storage != undefined) {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
                     this.creep.moveTo(storage);
+            }
+            else {
+                if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
+                    this.creep.moveTo(this.creep.room.controller);
             }
         }
     }

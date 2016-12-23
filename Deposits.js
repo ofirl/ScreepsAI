@@ -138,8 +138,8 @@ Deposits.prototype.energyCapacity = function() {
 			for(var i = 0; i < this.deposits.length; i++)
 				energyCapacity += this.deposits[i].energyCapacity;
 
-			for(var i = 0; i < this.spawns.length; i++)
-				energyCapacity += this.spawns[i].energyCapacity;
+			/*for(var i = 0; i < this.spawns.length; i++)
+				energyCapacity += this.spawns[i].energyCapacity;*/
 
 			return energyCapacity;
 		}.bind(this)

@@ -97,16 +97,19 @@ roomManager.prototype.populate = function() {
 
         if (this.population.typeDistribution.CreepMiner.total == 0)
             this.creepFactory.new(Constants.ROLE_MINER, this.depositManager.getSpawnDeposit());
-        if (this.population.typeDistribution.CreepLorry.total == 0)
+        if (this.population.typeDistribution.CreepLorry.total == 0 && this.room.storage)
             this.creepFactory.new(Constants.ROLE_LORRY, this.depositManager.getSpawnDeposit());
-        if (this.population.typeDistribution.CreepCarrier.total == 0)
+        if (this.population.typeDistribution.CreepCarrier.total == 0 && this.room.storage)
             this.creepFactory.new(Constants.ROLE_CARRIER, this.depositManager.getSpawnDeposit());
+        if (this.population.typeDistribution.CreepBuilder.total == 0)
+            this.creepFactory.new(Constants.ROLE_MINER, this.depositManager.getSpawnDeposit());
 
         if(this.depositManager.energy() > 200) {
             var types = this.population.getTypes();
             for(var i = 0; i < types.length; i++) {
                 var ctype = types[i];
-                if(this.depositManager.deposits.length > ctype.minExtensions) {
+                if(this.depositManager.deposits.length > ctype.minExtensions &&
+                    (!ctype.requireStorage || ctype.requireStorage && this.room.storage != undefined)) {
                     if(ctype.total < ctype.max) {
                         this.creepFactory.new(ctype.type, this.depositManager.getSpawnDeposit());
                         break;

@@ -20,7 +20,6 @@ module.exports.loop = function  () {
         
         var roomHandler = new RoomManager(Game.rooms[n], RoomHandler, room.buildQueue);
         RoomHandler.set(Game.rooms[n], roomHandler);
-
     }
 
     // Load rooms
@@ -54,4 +53,13 @@ module.exports.loop = function  () {
 
     //operate towers
     generalFunctions.operateTowers();
+
+    //move claim creeps
+    for (let c in Game.creeps) {
+        var creep = Game.creeps[c];
+        if (creep.memory.role != 'CreepClaimer')
+            continue;
+
+        generalFunctions.runClaimers(creep);
+    }
 };
