@@ -1,25 +1,33 @@
 var Constants= require('Constants');
 
+//TODO : check the spawning
+/*var roleSpawnFunctions = {
+    [Constants.ROLE_MINER] : StructureSpawn.prototype.spawnMiner(),
+    [Constants.ROLE_BUILDER] : StructureSpawn.prototype.spawnBuilder(),
+    [Constants.ROLE_CARRIER] : StructureSpawn.prototype.spawnCarrier(),
+    [Constants.ROLE_LORRY] : StructureSpawn.prototype.spawnLorry(),
+    [Constants.ROLE_LONG_DISTANCE_MINER] : StructureSpawn.prototype.spawnLongDistanceMiner(),
+    [Constants.ROLE_SCOUT] : StructureSpawn.prototype.spawnScout(),
+};*/
+
 module.exports = function() {
 
     StructureSpawn.prototype.createCustomCreep =
         function(energy, roleName) {
+
             switch (roleName) {
                 case Constants.ROLE_MINER :
-                    this.spawnMiner(energy);
-                    break;
+                    return this.spawnMiner(energy);
                 case Constants.ROLE_LORRY :
-                    this.spawnLorry(energy);
-                    break;
+                    return this.spawnLorry(energy);
                 case Constants.ROLE_CARRIER :
-                    this.spawnCarrier(energy);
-                    break;
+                    return this.spawnCarrier(energy);
                 case Constants.ROLE_BUILDER :
-                    this.spawnBuilder(energy);
-                    break;
+                    return this.spawnBuilder(energy);
                 case Constants.ROLE_LONG_DISTANCE_MINER :
-                    this.spawnLongDistanceMiner(energy);
-                    break;
+                    return this.spawnLongDistanceMiner(energy);
+                case Constants.ROLE_SCOUT :
+                    return this.spawnScout(energy);
             }
         };
 
@@ -38,7 +46,7 @@ module.exports = function() {
             body.push(MOVE);
             body.push(MOVE);
 
-            logSpawn(this, body, roleName);
+            return logSpawn(this, body, roleName);
         };
 
     StructureSpawn.prototype.spawnLorry =
@@ -53,7 +61,7 @@ module.exports = function() {
                 body.push(CARRY);
             body.push(MOVE);
 
-            logSpawn(this, body, roleName);
+            return logSpawn(this, body, roleName);
         };
 
     StructureSpawn.prototype.spawnCarrier =
@@ -73,7 +81,7 @@ module.exports = function() {
             for (let i = 0; i < numberOfParts; i++)
                 body.push(MOVE);
 
-            logSpawn(this, body, roleName);
+            return logSpawn(this, body, roleName);
         };
 
     StructureSpawn.prototype.spawnBuilder =
@@ -93,7 +101,7 @@ module.exports = function() {
             for (let i = 0; i < numberOfParts; i++)
                 body.push(MOVE);
 
-            logSpawn(this, body, roleName);
+            return logSpawn(this, body, roleName);
         };
 
     StructureSpawn.prototype.spawnLongDistanceMiner =
@@ -114,15 +122,38 @@ module.exports = function() {
             for (let i = 0; i < numberOfParts; i++)
                 body.push(MOVE);
 
-            logSpawn(this, body, roleName);
+            return logSpawn(this, body, roleName);
+        };
+
+    StructureSpawn.prototype.spawnScout =
+        function(energy) {
+            //energy = Math.min(Constants.maxCreepCost, energy);
+            var requiredEnergy = Constants.SCOUT_TOUGH_PARTS * 10 + Constants.SCOUT_CARRY_PARTS * 50 +
+                Constants.SCOUT_ATTACK_PARTS * 80 + Constants.SCOUT_MOVE_PARTS * 50;
+            if (energy < requiredEnergy)
+                return ERR_NOT_ENOUGH_ENERGY;
+            
+            var body = [];
+            var roleName = Constants.ROLE_SCOUT;
+
+            for (let i = 0; i < Constants.SCOUT_TOUGH_PARTS; i++)
+                body.push(TOUGH);
+            for (let i = 0; i < Constants.SCOUT_CARRY_PARTS; i++)
+                body.push(CARRY);
+            for (let i = 0; i < Constants.SCOUT_ATTACK_PARTS; i++)
+                body.push(ATTACK);
+            for (let i = 0; i < Constants.SCOUT_MOVE_PARTS; i++)
+                body.push(MOVE);
+
+            return logSpawn(this, body, roleName);
         };
 };
 
 // private
 function logSpawn(spawn, body, roleName) {
-    var name = spawn.createCreep(body, roleName + " " + Math.floor(Math.random() * 100), {role: roleName})
+    var name = spawn.createCreep(body, roleName + " " + Math.floor(Math.random() * 100), {role: roleName});
     if (!(name < 0))
-        console.log('Happy Birthday ' + name);
+        console.log("Spawned new " + roleName + " : " + name);
 
     return name;
 }

@@ -4,10 +4,11 @@ var Cache = require('Cache');
 const profiler = require('profiler');
 profiler.registerObject(Resources, 'Resources');
 
-function Resources(room, population) {
+function Resources(room, population, roomMemoryObject) {
 	this.cache = new Cache();
 	this.room = room;
 	this.population = population;
+    this.roomMemoryObject = roomMemoryObject;
 }
 
 Resources.prototype.getAvailableResource = function() {
@@ -18,9 +19,12 @@ Resources.prototype.getAvailableResource = function() {
     {
         var creep = this.population.creeps[i];
         var source = creep.memory['source'];
-        if (source)
+        if (source) {
             sources.push(source);
+            //console.log(creep.name);
+        }
     }
+    //console.log(sources);
     for (var i = 0; i < srcs.length; i++) {
         var source = srcs[i];
         if (sources.indexOf(source.id) == -1)
@@ -58,12 +62,12 @@ Resources.prototype.getSources = function(room) {
 };
 
 Resources.prototype.getLonelyLongDistanceMiningRoom = function() {
-    var rooms = Memory.longDistanceMiningRooms;
+    var rooms = this.roomMemoryObject.longDistanceMining;
     var taken = [];
     for (var i = 0 ; i < this.population.creeps.length; i++)
     {
         var creep = this.population.creeps[i];
-        var roomTaken = creep.memory['targetRoom'];
+        var roomTaken = creep.memory['targetResourceRoom'];
         if (roomTaken)
             taken.push(roomTaken);
     }

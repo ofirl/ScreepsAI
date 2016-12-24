@@ -1,5 +1,6 @@
 require('SpawnFunctions')();
 var CreepClaimer = require('CreepClaimer');
+var CreepScout = require('CreepScout');
 var CreepBase = require('CreepBase');
 //var consts = require('Constants');
 //var roleHarvester = require('role.harvester');
@@ -37,6 +38,21 @@ generalFunctions.clearMemory = function() {
     }
 };
 
+//update room memory object
+generalFunctions.updateTicksToScout = function (rooMemoryObject, num) {
+    for (var r in Memory.rooms) {
+        var roomObject = Memory.rooms[r];
+        if (roomObject.name != rooMemoryObject.name)
+            continue;
+
+        if (num == undefined)
+            num = rooMemoryObject.ticksToScout - 1;
+        
+        Memory.rooms[r].ticksToScout = num;
+        return;
+    }
+};
+
 // operate towers
 generalFunctions.operateTowers = function () {
     var towers = Game.rooms.W2N5.find(FIND_STRUCTURES, {
@@ -55,6 +71,13 @@ generalFunctions.runClaimers = function (creep) {
     generalFunctions.extend(claimer, CreepBase);
     
     claimer.init();
+};
+
+generalFunctions.runScouts = function (creep) {
+    var scout = new CreepScout(creep);
+    generalFunctions.extend(scout, CreepBase);
+
+    scout.init();
 };
 
 module.exports = generalFunctions;

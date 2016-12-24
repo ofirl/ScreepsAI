@@ -99,9 +99,11 @@ function Population(room) {
         this.typeDistribution[creepType].total++;
     }
 
-    for (let creep in Game.creeps)
-        if (Game.creeps[creep].memory.role == 'CreepLongDistanceMiner')
+    for (let c in Game.creeps) {
+        var creep = Game.creeps[c];
+        if (creep.memory.role == 'CreepLongDistanceMiner' && creep.memory['srcStorageRoom'] == this.room.name)
             this.typeDistribution.CreepLongDistanceMiner.total++;
+    }
     /*this.typeDistribution.CreepLongDistanceMiner.total = Game.find(FIND_MY_CREEPS, {
         filter : (c) => c.memory.role == 'CreepLongDistanceMining'
     }).length;*/

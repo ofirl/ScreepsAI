@@ -49,6 +49,7 @@ creepLongDistanceMiner.prototype.init = function() {
     this.act();
 };
 
+// TODO : implement scout calling instead of timer
 creepLongDistanceMiner.prototype.act = function() {
     // creep carry is full
     if (this.remember('last-action') == ACTIONS.HARVEST && this.creep.carry.energy == this.creep.carryCapacity)

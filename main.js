@@ -11,6 +11,9 @@ const profiler = require('profiler');
 //profiler enable - comment out if not used
 //profiler.enable();
 
+// TODO : implement attack/defense creeps
+// TODO : implement attack/defense logic
+
 module.exports.loop = function  () {
     profiler.wrap(function() {
         // Main.js logic should go here.
@@ -27,7 +30,7 @@ module.exports.loop = function  () {
         if (Game.rooms[n] == undefined)
             continue;
         
-        var roomHandler = new RoomManager(Game.rooms[n], RoomHandler, room.buildQueue);
+        var roomHandler = new RoomManager(Game.rooms[n], RoomHandler, room);
         RoomHandler.set(Game.rooms[n], roomHandler);
     }
 
@@ -71,10 +74,15 @@ module.exports.loop = function  () {
     //move claim creeps
     for (let c in Game.creeps) {
         var creep = Game.creeps[c];
-        if (creep.memory.role != 'CreepClaimer')
-            continue;
 
-        generalFunctions.runClaimers(creep);
+        switch (creep.memory.role) {
+            case 'CreepClaimer' :
+                generalFunctions.runClaimers(creep);
+                break;
+            case 'CreepScout' :
+                generalFunctions.runScouts(creep);
+                break;
+        }
     }
 
 

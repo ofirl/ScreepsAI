@@ -70,7 +70,7 @@ creepLorry.prototype.act = function() {
         }
         // storage did not built yet
         else {
-            var storage = this.creep.pos.findClosestByPath(this.depositManager.extensions.concat(this.depositManager.spawns), {filter: minerStructureFilter});
+            var storage = this.creep.pos.findClosestByPath(this.depositManager.extensions.concat(this.depositManager.spawns));
             if (storage != undefined) {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
                     this.creep.moveTo(storage);
