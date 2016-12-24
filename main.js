@@ -18,7 +18,6 @@ module.exports.loop = function  () {
     profiler.wrap(function() {
         // Main.js logic should go here.
 
-
     // clear memory
     generalFunctions.clearMemory();
     

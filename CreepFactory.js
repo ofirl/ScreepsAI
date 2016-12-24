@@ -11,10 +11,6 @@ var CreepCarrier = require('CreepCarrier');
 //var CreepShooter = require('CreepShooter');
 var generalFunctions = require('generalFunctions');
 
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(creepFactory, 'CreepFactory');
-
 function creepFactory(depositManager, resourceManager, constructionsManager, defenseManager, population, roomHandler) {
     this.depositManager = depositManager;
     this.resourceManager = resourceManager;
@@ -75,3 +71,7 @@ creepFactory.prototype.new = function(creepType, spawn) {
 };
 
 module.exports = creepFactory;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(creepFactory, 'CreepFactory');

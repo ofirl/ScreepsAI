@@ -5,10 +5,6 @@ var ACTIONS = {
     WITHDRAW: 2
 };
 
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(creepBuilder, 'CreepBuilder');
-
 function creepBuilder(creep, constructionsManager, depositManager, resourceManager) {
     this.creep = creep;
     this.constructionsManager = constructionsManager;
@@ -79,3 +75,7 @@ creepBuilder.prototype.act = function() {
 };
 
 module.exports = creepBuilder;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(creepBuilder, 'CreepBuilder');

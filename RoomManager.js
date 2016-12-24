@@ -7,10 +7,6 @@ var DefenseManager = require('DefenseManager');
 var Constants = require('Constants');
 var generalFunctions = require('generalFunctions');
 
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(roomManager, 'RoomManager');
-
 function roomManager(room, roomHandler, roomMemoryObject) {
     this.room = room;
     this.roomHandler = roomHandler;
@@ -243,6 +239,10 @@ roomManager.prototype.defend = function() {
  }
  */
 
-roomManager.prototype.loadCreeps = profiler.registerFN(roomManager.prototype.loadCreeps, 'RoomManager.loadCreeps');
+//profiler.addObjectToProfiler(roomManager, "RoomManager");
 
 module.exports = roomManager;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(roomManager, 'RoomManager');

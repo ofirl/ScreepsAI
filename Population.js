@@ -1,9 +1,5 @@
 var Cache = require('Cache');
 
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(Population, 'Population');
-
 function Population(room) {
 	this.cache = new Cache();
 	this.room = room;
@@ -201,3 +197,7 @@ function createTypeDistribution(creepType) {
         requireContainer : false
 	};
 };
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(Population, 'Population');

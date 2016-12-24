@@ -4,11 +4,6 @@ var CONSTANTS = {
     PARALLEL_WALL_REPAIR : 3,
 };
 
-
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(creepClaimer, 'CreepClaimer');
-
 function creepClaimer(creep) {
     this.creep = creep;
 }
@@ -37,3 +32,7 @@ creepClaimer.prototype.act = function() {
 };
 
 module.exports = creepClaimer;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(creepClaimer, 'CreepClaimer');

@@ -21,3 +21,7 @@ Cache.prototype.remember = function(key, callback, args) {
 };
 
 module.exports = Cache;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(Cache, 'Cache');

@@ -11,10 +11,6 @@ var CreepBase = require('CreepBase');
 
 var generalFunctions = {};
 
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(generalFunctions, 'generalFunctions');
-
 generalFunctions.extend = function(target, source) {
     for(var n in source) {
         if(!source.hasOwnProperty(n)) {
@@ -81,6 +77,10 @@ generalFunctions.runScouts = function (creep) {
 };
 
 module.exports = generalFunctions;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(generalFunctions, 'generalFunctions');
 
 /*
 module.exports = {

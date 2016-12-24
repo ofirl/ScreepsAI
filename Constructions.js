@@ -6,11 +6,6 @@ var CONST = {
 };
 var Cache = require('Cache');
 
-
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(Constructions.prototype, 'Constructions');
-
 function Constructions(room, buildQueue) {
     this.room = room;
     this.buildQueue = buildQueue;
@@ -210,3 +205,7 @@ Constructions.prototype.saveBuildQueueToMemory = function(id) {
 };
 
 module.exports = Constructions;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(Constructions, 'Constructions');

@@ -6,10 +6,6 @@ var ACTIONS = {
     ATTACK: 3,
 };
 
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(creepScout, 'CreepScout');
-
 function creepScout(creep, defenseManager, depositManager) {
     this.creep = creep;
     this.defenseManager = defenseManager;
@@ -93,3 +89,7 @@ creepScout.prototype.act = function() {
 };
 
 module.exports = creepScout;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(creepScout, 'CreepScout');

@@ -1,7 +1,3 @@
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(DefenseManager, 'DefenseManager');
-
 function DefenseManager(room) {
     this.room = room;
     this.towers = this.room.find(
@@ -43,3 +39,7 @@ DefenseManager.prototype.operateTowers = function () {
 };
 
 module.exports = DefenseManager;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(DefenseManager, 'DefenseManager');

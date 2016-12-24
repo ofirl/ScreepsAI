@@ -4,10 +4,6 @@ var CONSTS = {
 	EMPTY_LEVEL: 0.5,
 };
 
-//profiler setup
-const profiler = require('profiler');
-profiler.registerObject(Deposits, 'Deposits');
-
 function Deposits(room) {
 	this.cache = new Cache();
 	this.room = room;
@@ -271,3 +267,7 @@ function filterExtensions(structure) {
 }
 
 module.exports = Deposits;
+
+//profiler setup
+const profiler = require('profiler');
+profiler.registerObject(Deposits, 'Deposits');
