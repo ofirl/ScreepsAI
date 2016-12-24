@@ -46,16 +46,25 @@ Constructions.prototype.getDamagedStructures = function() {
                 FIND_STRUCTURES,
                 {
                     filter: function(s) {
-                        var targets = s.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
-                        if(targets.length != 0)
-                            return false;
+                        // TODO : save the hostile creeps variable for reuse
+                        /*var hostileCreeps = this.cache.remember(
+                            'hostile-creeps-' + this.room.name,
+                            function() {
+                                return this.room.find(FIND_HOSTILE_CREEPS);
+                            }.bind(this)
+                        );
+                        if (hostileCreeps) {
+                            var targets = s.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+                            if (targets.length != 0)
+                                return false;
+                        }*/
 
                         if (s.structureType == STRUCTURE_WALL)
                             return false;
 
                         if((s.hits / s.hitsMax < CONST.STANDARD_FIX && s.structureType != STRUCTURE_RAMPART) || (s.structureType == STRUCTURE_RAMPART && s.hits / s.hitsMax < CONST.RAMPART_FIX))
                             return true;
-                    }
+                    }.bind(this)
                 }
             );
         }.bind(this)
@@ -70,16 +79,25 @@ Constructions.prototype.getUpgradeableStructures = function() {
                 FIND_STRUCTURES,
                 {
                     filter: function(s) {
-                        var targets = s.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
-                        if(targets.length != 0)
-                            return false;
+                        // TODO : save the hostile creeps variable for reuse
+                        /*var hostileCreeps = this.cache.remember(
+                            'hostile-creeps-' + this.room.name,
+                            function() {
+                                return this.room.find(FIND_HOSTILE_CREEPS);
+                            }.bind(this)
+                        );
+                        if (hostileCreeps) {
+                            var targets = s.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+                            if (targets.length != 0)
+                                return false;
+                        }*/
 
                         if (s.structureType == STRUCTURE_WALL)
                             return false;
 
                         if((s.hits / s.hitsMax < CONST.STANDARD_MAX && s.structureType != STRUCTURE_RAMPART) || (s.structureType == STRUCTURE_RAMPART && s.hits / s.hitsMax < CONST.RAMPART_MAX))
                             return true;
-                    }
+                    }.bind(this)
                 }
             );
         }.bind(this)

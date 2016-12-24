@@ -9,7 +9,6 @@ function creepClaimer(creep) {
 }
 
 creepClaimer.prototype.init = function() {
-    console.log('hi')
     if(this.moveToNewRoom() == true)
         return;
 

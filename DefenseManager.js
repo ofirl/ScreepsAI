@@ -1,5 +1,8 @@
+var Cache = require('Cache');
+
 function DefenseManager(room) {
     this.room = room;
+    this.cache = new Cache();
     this.towers = this.room.find(
         FIND_STRUCTURES,
         {
@@ -7,7 +10,7 @@ function DefenseManager(room) {
         }
     );
 
-    this.hostileCreeps = this.room.find(FIND_HOSTILE_CREEPS);
+    this.hostileCreeps = this.getHostileCreeps();
     this.damagedCreeps = this.room.find(
         FIND_MY_CREEPS,
         {
@@ -15,6 +18,15 @@ function DefenseManager(room) {
         }
     );
 }
+
+DefenseManager.prototype.getHostileCreeps = function () {
+    return this.cache.remember(
+        'hostile-creeps-' + this.room.name,
+        function() {
+            return this.room.find(FIND_HOSTILE_CREEPS);
+        }.bind(this)
+    );
+};
 
 DefenseManager.prototype.operateTowers = function () {
     if (this.towers.length == 0)
