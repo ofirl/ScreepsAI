@@ -1,6 +1,6 @@
 var CONST = {
     RAMPART_MAX: 1,
-    RAMPART_FIX: 0.30,
+    RAMPART_FIX: 0.10,
     STANDARD_FIX: 0.90,
     STANDARD_MAX : 1,
 };

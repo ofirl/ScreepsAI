@@ -23,10 +23,10 @@ creepScout.prototype.init = function() {
     }
 
     if (!this.remember('scouting-route')) {
-        for (let r in Memory.scoutingRoutes) {
-            var route = Memory.scoutingRoutes[r];
-            if (route[0] == this.creep.room.name) {
-                this.remember('scouting-route', route.splice(0, 1));
+        for (var i = 0; i < Memory.scoutingRoutes.length; i++) {
+            var route = Memory.scoutingRoutes[i];
+            if (route.start == this.creep.room.name) {
+                this.remember('scouting-route', route.rooms);
                 break;
             }
         }
