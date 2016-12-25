@@ -55,7 +55,7 @@ creepMiner.prototype.act = function() {
     // creep should harvest
     if (this.remember('last-action') == ACTIONS.HARVEST) {
         if (this.container != undefined) {
-            if (this.creep.pos.isEqualTo(this.container.pos.x,this.container.pos.y))
+            if (this.creep.pos.isEqualTo(this.container.pos))
                 this.creep.harvest(this.resource);
             else
                 this.creep.moveTo(this.container);

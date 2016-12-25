@@ -11,8 +11,10 @@ const profiler = require('profiler');
 //profiler enable - comment out if not used
 //profiler.enable();
 
-// TODO : implement attack/defense creeps
-// TODO : implement attack/defense logic
+// TODO : implement semi-automatic claiming - did : claimer will spawn, claim the room, and start....
+// TODO : building the spawn(spawn will not be placed), need to do : send builders to complete the spawn (implement request for reinforcements)
+
+// TODO : implement attack/defense creeps and logic
 
 module.exports.loop = function  () {
     profiler.wrap(function() {

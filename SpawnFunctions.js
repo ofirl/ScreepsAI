@@ -1,6 +1,5 @@
 var Constants= require('Constants');
 
-//TODO : check the spawning
 /*var roleSpawnFunctions = {
     [Constants.ROLE_MINER] : StructureSpawn.prototype.spawnMiner(),
     [Constants.ROLE_BUILDER] : StructureSpawn.prototype.spawnBuilder(),
@@ -15,6 +14,11 @@ module.exports = function() {
     StructureSpawn.prototype.createCustomCreep =
         function(energy, roleName) {
 
+            // TODO : check spawning
+            // roleName must start with 'Creep'
+            //var funcName = 'spawn' + roleName.substring(5, roleName.length);
+            //return StructureSpawn.prototype[funcName](energy).bind(this);
+
             switch (roleName) {
                 case Constants.ROLE_MINER :
                     return this.spawnMiner(energy);
@@ -28,6 +32,8 @@ module.exports = function() {
                     return this.spawnLongDistanceMiner(energy);
                 case Constants.ROLE_SCOUT :
                     return this.spawnScout(energy);
+                case Constants.ROLE_CLAIMER :
+                    return this.spawnClaimer(energy);
             }
         };
 
@@ -51,7 +57,7 @@ module.exports = function() {
 
     StructureSpawn.prototype.spawnLorry =
         function(energy) {
-            var carryParts = Math.min(Math.floor((energy - 50) / 100), Constants.MAX_CARRY_PARTS);
+            var carryParts = Math.min(Math.floor((energy - 100) / 50), Constants.MAX_CARRY_PARTS);
             if (carryParts == 0)
                 return ERR_NOT_ENOUGH_ENERGY;
             var body = [];
@@ -59,6 +65,7 @@ module.exports = function() {
 
             for (var i = 0; i < carryParts; i++)
                 body.push(CARRY);
+            body.push(MOVE);
             body.push(MOVE);
 
             return logSpawn(this, body, roleName);
@@ -147,6 +154,27 @@ module.exports = function() {
 
             return logSpawn(this, body, roleName);
         };
+
+    StructureSpawn.prototype.spawnClaimer =
+        function(energy) {
+            var requiredEnergy = 600 + 100 + 50 + 50; //800
+            if (energy < requiredEnergy)
+                return ERR_NOT_ENOUGH_ENERGY;
+            
+            var body = [];
+            var roleName = Constants.ROLE_CLAIMER;
+            
+            for (let i = 0; i < Constants.CLAIMER_CARRY_PARTS; i++)
+                body.push(CARRY);
+            for (let i = 0; i < Constants.CLAIMER_WORK_PARTS; i++)
+                body.push(WORK);
+            for (let i = 0; i < Constants.CLAIMER_MOVE_PARTS; i++)
+                body.push(MOVE);
+
+            body.push(CLAIM);
+
+            return logSpawn(this, body, roleName);
+        }
 };
 
 // private

@@ -115,9 +115,11 @@ roomManager.prototype.populate = function() {
         if (this.population.typeDistribution.CreepBuilder.total == 0)
             this.creepFactory.new(Constants.ROLE_MINER, this.depositManager.getSpawnDeposit());
 
+        // can spawn
         if (this.depositManager.energy() > 200) {
             var spawnType = false;
             var types = this.population.getTypes();
+            // normal spawns
             for (var i = 0; i < types.length; i++) {
                 var ctype = types[i];
                 if (ctype.total < ctype.max && this.depositManager.deposits.length > ctype.minExtensions &&
@@ -136,10 +138,27 @@ roomManager.prototype.populate = function() {
                 }
             }
 
+            // spawn scout
             if (!spawnType) {
                 if (this.roomMemoryObject.spawnScout && this.roomMemoryObject.ticksToScout == 0) {
                     this.creepFactory.new(Constants.ROLE_SCOUT, this.depositManager.getSpawnDeposit());
                     generalFunctions.updateTicksToScout(this.roomMemoryObject, Constants.SCOUT_SPAWN_TICKS);
+                    spawnType = Constants.ROLE_SCOUT;
+                }
+            }
+
+            // spawn claimer
+            if (!spawnType) {
+                if (Memory.claimRoom && Memory.spawnClaimer == true) {
+                    this.creepFactory.new(Constants.ROLE_CLAIMER, this.depositManager.getSpawnDeposit());
+                    var roomObject = {
+                        name : Memory.claimRoom,
+                        spawnScout : false,
+                        ticksToScout : 0,
+                        report : true,
+                        buildQueue : [],
+                    };
+                    Memory.rooms.push(roomObject);
                 }
             }
         }
