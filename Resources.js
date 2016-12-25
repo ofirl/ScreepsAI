@@ -5,6 +5,12 @@ function Resources(room, population, roomMemoryObject) {
 	this.room = room;
 	this.population = population;
     this.roomMemoryObject = roomMemoryObject;
+    var mineralInRoom = this.room.find(FIND_MINERALS,
+        {
+            filter : filterMineralsWithExtractors
+        }
+    );
+    this.mineral = mineralInRoom.length > 0 ? mineralInRoom[0] : false;
 }
 
 Resources.prototype.getAvailableResource = function() {
@@ -75,6 +81,20 @@ Resources.prototype.getLonelyLongDistanceMiningRoom = function() {
 
     return false;
 };
+
+function filterMineralsWithExtractors(structure) {
+    if(structure.room.lookForAt(LOOK_STRUCTURES, structure.pos).length > 0)
+        return true;
+
+    return false;
+}
+
+function filterMineralsWithoutExtractors(structure) {
+    if(!structure.room.lookForAt(LOOK_STRUCTURES, structure).length > 0)
+        return true;
+
+    return false;
+}
 
 module.exports = Resources;
 

@@ -32,6 +32,8 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     if (this.room.storage)
         this.population.typeDistribution.CreepCarrier.max += Math.floor(this.room.storage.store.energy / 250000);
     this.population.typeDistribution.CreepLorry.max = this.resourceManager.getSources().length;
+    this.population.typeDistribution.CreepHarvester.max =
+        (this.resourceManager.mineral && this.resourceManager.mineral.mineralAmount > 0 && this.depositManager.storage.store['H'] < 250000) ? 1 : 0;
     this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.defenseManager, this.population, this.roomHandler);
 }
 

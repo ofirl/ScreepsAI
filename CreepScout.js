@@ -22,8 +22,8 @@ creepScout.prototype.init = function() {
         this.remember('last-action', ACTIONS.ATTACK);
         this.remember('targetRoom', false);
     }
-
-    if(this.moveToNewRoom()) {
+    
+    if(this.moveToNewRoom() == true) {
         return;
     }
 
@@ -38,15 +38,11 @@ creepScout.prototype.init = function() {
     }
 
     this.scoutingRoute = this.remember('scouting-route');
-    if (!this.scoutingRoute)
-        return;
 
     this.act();
 };
 
 creepScout.prototype.act = function() {
-    console.log(this.creep.room + ' ' + this.defenseManager.hostileCreeps);
-    Memory.test = this.defenseManager;
     if (this.defenseManager && this.defenseManager.hostileCreeps.length > 0)
         this.remember('last-action', ACTIONS.ATTACK);
     else if (this.creep.hits < this.creep.hitsMax)
@@ -54,14 +50,12 @@ creepScout.prototype.act = function() {
     else
         this.remember('last-action', ACTIONS.SCOUT);
 
-    console.log(this.remember('last-action'));
-
     // hostiles detected
     if (this.remember('last-action') == ACTIONS.ATTACK) {
         var target = this.creep.pos.findClosestByRange(this.defenseManager.hostileCreeps);
         this.creep.say('EXTERMINATE!');
         if (this.creep.attack(target) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(target);
+            this.creep.move(target);
 
         return;
     }

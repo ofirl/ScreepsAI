@@ -34,12 +34,14 @@ module.exports = function() {
                     return this.spawnScout(energy);
                 case Constants.ROLE_CLAIMER :
                     return this.spawnClaimer(energy);
+                case Constants.ROLE_HARVESTER :
+                    return this.spawnHarvester(energy);
             }
         };
 
     StructureSpawn.prototype.spawnMiner =
         function(energy) {
-            var workParts = Math.min(Math.floor((energy - 150) / 100), Constants.MAX_WORK_PARTS);
+            var workParts = Math.min(Math.floor((energy - 150) / 100), Constants.MAX_MINER_WORK_PARTS);
             if (workParts == 0)
                 return ERR_NOT_ENOUGH_ENERGY;
 
@@ -57,7 +59,7 @@ module.exports = function() {
 
     StructureSpawn.prototype.spawnLorry =
         function(energy) {
-            var carryParts = Math.min(Math.floor((energy - 100) / 50), Constants.MAX_CARRY_PARTS);
+            var carryParts = Math.min(Math.floor((energy - 100) / 50), Constants.MAX_LORRY_CARRY_PARTS);
             if (carryParts == 0)
                 return ERR_NOT_ENOUGH_ENERGY;
             var body = [];
@@ -172,6 +174,26 @@ module.exports = function() {
                 body.push(MOVE);
 
             body.push(CLAIM);
+
+            return logSpawn(this, body, roleName);
+        }
+
+    StructureSpawn.prototype.spawnHarvester =
+        function(energy) {
+            var requiredEnergy = Constants.HARVESTER_CARRY_PARTS * 100 +
+                (Constants.HARVESTER_WORK_PARTS + Constants.HARVESTER_MOVE_PARTS) * 50; // 5,5,5 = 1000
+            if (energy < requiredEnergy)
+                return ERR_NOT_ENOUGH_ENERGY;
+
+            var body = [];
+            var roleName = Constants.ROLE_HARVESTER;
+
+            for (let i = 0; i < Constants.HARVESTER_CARRY_PARTS; i++)
+                body.push(CARRY);
+            for (let i = 0; i < Constants.HARVESTER_WORK_PARTS; i++)
+                body.push(WORK);
+            for (let i = 0; i < Constants.HARVESTER_MOVE_PARTS; i++)
+                body.push(MOVE);
 
             return logSpawn(this, body, roleName);
         }
