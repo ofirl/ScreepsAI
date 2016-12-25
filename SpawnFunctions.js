@@ -14,7 +14,7 @@ module.exports = function() {
     StructureSpawn.prototype.createCustomCreep =
         function(energy, roleName) {
 
-            // TODO : check spawning
+            // OPTIMIZATION : cleaner spawning
             // roleName must start with 'Creep'
             //var funcName = 'spawn' + roleName.substring(5, roleName.length);
             //return StructureSpawn.prototype[funcName](energy).bind(this);

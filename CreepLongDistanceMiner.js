@@ -6,13 +6,12 @@ var ACTIONS = {
     DEPOSIT: 2
 };
 
-function creepLongDistanceMiner(creep, depositManager) {
+function creepLongDistanceMiner(creep, depositManager, defenseManager) {
     this.cache = new Cache();
     this.creep = creep;
-
-    //this.resourceManager = RoomHandler.get(Game.rooms[this.remember('targetRoom')]).resourceManager;
     this.depositManager = depositManager;
-};
+    this.defenseManager = defenseManager;
+}
 
 creepLongDistanceMiner.prototype.init = function() {
     /*if(!this.remember('targetRoom')) {
@@ -23,6 +22,18 @@ creepLongDistanceMiner.prototype.init = function() {
         if (src)
             this.remember('source', src.id);
     }*/
+
+    // hostiles detected
+    if (this.creep.room == this.remember('targetResourceRoom') && this.defenseManager.hostileCreeps.length > 0) {
+        this.remember('previous-role', this.creep.memory.role);
+        var safeRoom = this.remember('srcStorageRoom');
+        this.defenseManager.callForScout(safeRoom);
+        this.remember('targetRoom', safeRoom);
+        this.remember('role', Constants.ROLE_CARRIER);
+
+        return;
+    }
+
     if (!this.remember('srcStorageRoom'))
         this.remember('srcStorageRoom', this.creep.room.name);
 
@@ -45,22 +56,30 @@ creepLongDistanceMiner.prototype.init = function() {
     this.act();
 };
 
-// TODO : implement scout calling instead of timer
 creepLongDistanceMiner.prototype.act = function() {
     // creep carry is full
-    if (this.remember('last-action') == ACTIONS.HARVEST && this.creep.carry.energy == this.creep.carryCapacity)
+    if (this.remember('last-action') == ACTIONS.HARVEST && this.creep.isFull())
         this.remember('last-action', ACTIONS.DEPOSIT);
 
     // creep finished depositing
-    if (this.remember('last-action') == ACTIONS.DEPOSIT && this.creep.carry.energy == 0)
+    if (this.remember('last-action') == ACTIONS.DEPOSIT && this.creep.isEmpty())
         this.remember('last-action', ACTIONS.HARVEST);
 
     // creep should harvest
     if (this.remember('last-action') == ACTIONS.HARVEST) {
+        // found loot!
+        if (this.depositManager.droppedEnergy.length > 0) {
+            var droppedEnergy = this.creep.pos.findClosestByPath(this.depositManager.droppedEnergy);
+            if (this.creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE)
+                this.creep.moveToIfAble(droppedEnergy);
+
+            return;
+        }
+
         if (this.creep.pos.roomName != this.remember('targetResourceRoom')) {
             var exitDir = this.creep.room.findExitTo(this.remember('targetResourceRoom'));
             var exit = this.creep.pos.findClosestByRange(exitDir);
-            this.creep.moveTo(exit);
+            this.creep.moveToIfAble(exit);
         }
         else if (this.creep.harvest(this.resource) == ERR_NOT_IN_RANGE)
             this.creep.moveTo(this.resource);
@@ -70,20 +89,20 @@ creepLongDistanceMiner.prototype.act = function() {
         if (this.creep.pos.roomName != this.remember('srcStorageRoom')) {
             var exitDir = this.creep.room.findExitTo(this.remember('srcStorageRoom'));
             var exit = this.creep.pos.findClosestByRange(exitDir);
-            this.creep.moveTo(exit);
+            this.creep.moveToIfAble(exit);
         }
         else {
             var storage = this.depositManager.room.storage;
             if (storage != undefined) {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                    this.creep.moveTo(storage);
+                    this.creep.moveToIfAble(storage);
             }
             // should never happen - long distance mining = got storage already
             else {
                 storage = this.creep.pos.findClosestByPath(this.depositManager.getAvailableContainersToDeposit());
                 if (storage != undefined) {
                     if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                        this.creep.moveTo(storage);
+                        this.creep.moveToIfAble(storage);
                 }
             }
         }

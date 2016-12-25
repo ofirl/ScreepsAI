@@ -58,18 +58,18 @@ creepBuilder.prototype.act = function() {
             source = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToWithdraw());
         
         if (source && source.transfer(this.creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(source);
+            this.creep.moveToIfAble(source);
         else if (!source || source  == null || source == undefined){
             source = this.creep.pos.findClosestByPath(this.resourceManager.getSources());
             if (this.creep.harvest(source) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(source);
+                this.creep.moveToIfAble(source);
         }
     }
     // creep should build
     else {
         if (this.forceControllerUpgrade || !this.constructionsManager.constructStructure(this)) {
             if (this.creep.upgradeController(this.constructionsManager.room.controller) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(this.constructionsManager.room.controller);
+                this.creep.moveToIfAble(this.constructionsManager.room.controller);
         }
     }
 };

@@ -30,7 +30,8 @@ function Deposits(room) {
             filter : filterResourceContainers
         }
     );
-    this.droppedEnergy = this.room.find(FIND_DROPPED_ENERGY);
+    // TODO : refactor dropped energy to droppedResource
+    this.droppedEnergy = this.room.find(FIND_DROPPED_RESOURCES);
     this.storage = this.room.storage;
 
 	this.spawns = [];

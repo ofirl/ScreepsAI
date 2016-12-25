@@ -19,8 +19,8 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     this.population = new Population(this.room);
     this.depositManager = new Deposits(this.room);
     this.resourceManager = new Resources(this.room, this.population, this.roomMemoryObject);
-    this.constructionManager = new Constructions(this.room, roomMemoryObject.buildQueue);
-    this.defenseManager = new DefenseManager(this.room);
+    this.constructionManager = new Constructions(this.room, roomMemoryObject);
+    this.defenseManager = new DefenseManager(this.room, roomMemoryObject);
     this.population.typeDistribution.CreepBuilder.max = 3;
     if (this.room.storage)
         this.population.typeDistribution.CreepBuilder.max += Math.floor(this.room.storage.store.energy / 250000);
@@ -142,7 +142,7 @@ roomManager.prototype.populate = function() {
 
             // spawn scout
             if (!spawnType) {
-                if (this.roomMemoryObject.spawnScout && this.roomMemoryObject.ticksToScout == 0) {
+                if (this.roomMemoryObject.scoutNeeded && this.roomMemoryObject.ticksToScout == 0) {
                     this.creepFactory.new(Constants.ROLE_SCOUT, this.depositManager.getSpawnDeposit());
                     generalFunctions.updateTicksToScout(this.roomMemoryObject, Constants.SCOUT_SPAWN_TICKS);
                     spawnType = Constants.ROLE_SCOUT;

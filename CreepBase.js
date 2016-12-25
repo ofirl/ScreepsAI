@@ -66,7 +66,7 @@ CreepBase.moveToNewRoom = function() {
         if (moveRoom) {
             var exitDir = this.creep.room.findExitTo(targetRoom);
             var exit = this.creep.pos.findClosestByPath(exitDir);
-            this.creep.moveTo(exit);
+            this.creep.moveToIfAble(exit);
             return true;
         }
     }

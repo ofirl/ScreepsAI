@@ -40,7 +40,7 @@ creepFactory.prototype.load = function(creep) {
                 loadedCreep = new CreepLorry(creep, this.depositManager, this.resourceManager);
                 break;
             case Constants.ROLE_LONG_DISTANCE_MINER:
-                loadedCreep = new CreepLongDistanceMiner(creep, this.depositManager);
+                loadedCreep = new CreepLongDistanceMiner(creep, this.depositManager, this.defenseManager);
                 break;
             case Constants.ROLE_SCOUT:
                 loadedCreep = new CreepScout(creep, this.defenseManager, this.depositManager);

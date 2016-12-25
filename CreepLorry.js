@@ -47,13 +47,13 @@ creepLorry.prototype.act = function() {
         droppedEnergy = null;
         if (droppedEnergy != null) {
             if (this.creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(droppedEnergy);
+                this.creep.moveToIfAble(droppedEnergy);
         }
         else {
             var source = Game.getObjectById(this.remember('source-container'));
             //var source = this.creep.pos.findClosestByPath(this.depositManager.getResourceContainers());
             if (source && source.transfer(this.creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(source);
+                this.creep.moveToIfAble(source);
         }
     }
     // creep should deposit
@@ -62,20 +62,20 @@ creepLorry.prototype.act = function() {
         // storage is built
         if (target) {
             if (this.creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(target);
+                this.creep.moveToIfAble(target);
         }
         // storage did not built yet
         else {
             var storage = this.creep.pos.findClosestByPath(this.depositManager.extensions.concat(this.depositManager.spawns));
             if (storage != undefined) {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                    this.creep.moveTo(storage);
+                    this.creep.moveToIfAble(storage);
             }
             else {
                 storage = this.creep.pos.findClosestByPath(this.depositManager.getAvailableContainersToDeposit());
                 if (storage != undefined) {
                     if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                        this.creep.moveTo(storage);
+                        this.creep.moveToIfAble(storage);
                 }
             }
         }

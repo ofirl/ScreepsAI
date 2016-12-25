@@ -1,7 +1,9 @@
 var Cache = require('Cache');
+var roomHandler = require('RoomHandler');
 
-function DefenseManager(room) {
+function DefenseManager(room, roomMemoryObject) {
     this.room = room;
+    this.roomMemoryObject = roomMemoryObject;
     this.cache = new Cache();
     this.towers = this.room.find(
         FIND_STRUCTURES,
@@ -46,6 +48,39 @@ DefenseManager.prototype.operateTowers = function () {
                 var target = tower.pos.findClosestByRange(this.damagedCreeps);
                 tower.heal(target);
             }
+        }
+    }
+};
+
+// TODO : check it's working
+DefenseManager.prototype.callForScout = function (roomName) {
+    // safety first - should always pass
+    if (roomName) {
+        for (var r in Memory.rooms) {
+            var room = Memory.rooms[r];
+            if (room.name != roomName)
+                continue;
+
+            room.scoutNeeded = true;
+            return;
+        }
+    }
+};
+
+DefenseManager.prototype.isScoutNeeded = function () {
+    return this.roomMemoryObject.scoutNeeded;
+};
+
+DefenseManager.prototype.roomCleared = function (roomName) {
+    // safety first - should always pass
+    if (roomName) {
+        for (var r in Memory.rooms) {
+            var room = Memory.rooms[r];
+            if (room.name != roomName)
+                continue;
+
+            room.scoutNeeded = false;
+            return;
         }
     }
 };

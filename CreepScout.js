@@ -1,9 +1,14 @@
 var Constants = require('Constants');
+
 var Cache = require('Cache');
 var ACTIONS = {
     SCOUT: 1,
     HEAL: 2,
     ATTACK: 3,
+};
+var STATES = {
+    NORMAL : 1,
+    ATTACK : 2,
 };
 
 function creepScout(creep, defenseManager, depositManager) {
@@ -55,10 +60,18 @@ creepScout.prototype.act = function() {
         var target = this.creep.pos.findClosestByRange(this.defenseManager.hostileCreeps);
         this.creep.say('EXTERMINATE!');
         if (this.creep.attack(target) == ERR_NOT_IN_RANGE)
-            this.creep.move(target);
+            this.creep.moveToIfAble(target);
+
+        this.remember('attack', STATES.ATTACK);
 
         return;
     }
+
+    if (this.remember('attack') == STATES.ATTACK) {
+        this.remember('attack', STATES.NORMAL);
+        this.defenseManager.roomCleared(this.remember('heal-room'));
+    }
+    
     // normal scouting
     if (this.remember('last-action') == ACTIONS.SCOUT) {
         var index = this.scoutingRoute.indexOf(this.creep.room.name);
@@ -73,15 +86,6 @@ creepScout.prototype.act = function() {
     }
     // needs healing
     else {
-        // got in a fight, won, take loot
-        if (this.depositManager.droppedEnergy.length > 0) {
-            var droppedEnergy = this.depositManager.droppedEnergy[0];
-            if (this.creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(droppedEnergy);
-
-            return;
-        }
-
         if (this.creep.room != this.remember('heal-room')) {
             this.remember('targetRoom', this.remember('heal-room'));
 
@@ -89,7 +93,7 @@ creepScout.prototype.act = function() {
         }
 
         var tower = this.creep.pos.findClosestByPath(this.defenseManager.towers);
-        this.creep.move(tower);
+        this.creep.moveToIfAble(tower);
     }
 };
 

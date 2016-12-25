@@ -39,22 +39,22 @@ creepHarvester.prototype.init = function() {
 
 creepHarvester.prototype.act = function() {
     // creep carry is full
-    if (this.remember('last-action') == ACTIONS.HARVEST && this.creep.carry[this.mineralType] == this.creep.carryCapacity)
+    if (this.remember('last-action') == ACTIONS.HARVEST && _.sum(this.creep.carry) == this.creep.carryCapacity)
         this.remember('last-action', ACTIONS.DEPOSIT);
 
     // creep finished depositing
-    if (this.remember('last-action') == ACTIONS.DEPOSIT && this.creep.carry[this.mineralType] == undefined)
+    if (this.remember('last-action') == ACTIONS.DEPOSIT && _.sum(this.creep.carry) == 0)
         this.remember('last-action', ACTIONS.HARVEST);
 
     // creep should harvest
     if (this.remember('last-action') == ACTIONS.HARVEST) {
         if (this.creep.harvest(this.resource) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(this.resource);
+            this.creep.moveToIfAble(this.resource);
     }
     // creep should deposit
     else {
         if (this.creep.transfer(this.storage, this.mineralType) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(this.storage);
+            this.creep.moveToIfAble(this.storage);
     }
 };
 

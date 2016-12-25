@@ -39,7 +39,7 @@ creepClaimer.prototype.init = function(constructionsManager, resourceManager) {
 creepClaimer.prototype.act = function() {
     if (this.remember('last-action') == ACTIONS.CLAIM) {
         if (this.creep.claimController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(this.creep.room.controller);
+            this.creep.moveToIfAble(this.creep.room.controller);
 
         return;
     }
@@ -58,7 +58,7 @@ creepClaimer.prototype.act = function() {
     else {
         var resource = this.resourceManager.getAvailableResource();
         if (this.creep.harvest(resource) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(resource);
+            this.creep.moveToIfAble(resource);
     }
 
     /*if (!this.remeber('targetRoom')) {
@@ -66,7 +66,7 @@ creepClaimer.prototype.act = function() {
         var index = claimPath.indexOf(this.creep.room.name);
         if (index == claimPath.length - 1) {
             if (this.creep.claimController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(this.creep.room.controller)
+                this.creep.moveToIfAble(this.creep.room.controller)
         }
         else
             this.remember('targetRoom', claimPath[index + 1]);

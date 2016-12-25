@@ -16,6 +16,15 @@ function creepCarrier(creep, constructionsManager, depositManager, defenseManage
 };
 
 creepCarrier.prototype.init = function() {
+    if (this.remember('previous-role')) {
+        if (!this.defenseManager.isScoutNeeded()) {
+            this.remember('role', this.remember('previous-role'));
+            this.remember('previous-role', false);
+
+            return;
+        }
+    }
+
     if (!this.remember('repair-wall'))
         this.remember('repair-wall', 0);
 
@@ -39,26 +48,43 @@ creepCarrier.prototype.act = function() {
         this.remember('last-action', ACTIONS.DEPOSIT);
 
     // creep ran out of energy
-    if (this.remember('last-action') == ACTIONS.DEPOSIT && this.creep.carry.energy == 0) {
+    if (this.remember('last-action') == ACTIONS.DEPOSIT && _.sum(this.creep.carry) == 0) {
         this.remember('last-action', ACTIONS.WITHDRAW);
         this.remember('repair-wall', 0);
     }
 
+    // picked up a resource, not energy
+    if (this.creep.carry.energy != _.sum(this.creep.carry))
+        this.remember('last-action', ACTIONS.DEPOSIT);
+
     // creep should withdraw energy
     if (this.remember('last-action') == ACTIONS.WITHDRAW) {
+        // creep full, but not with energy only
+        if (this.creep.carry.energy != _.sum(this.creep.carry)) {
+            var source = this.depositManager.storage;
+            if (!source)
+                source = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToWithdraw());
+
+            if (source && this.creep.emptyCarry(source) == ERR_NOT_IN_RANGE)
+                this.creep.moveToIfAble(source);
+
+            return;
+        }
+
+        // check for dropped energy
         var droppedEnergy = this.creep.pos.findClosestByPath(this.depositManager.droppedEnergy);
-        droppedEnergy = null;
         if (droppedEnergy != null) {
             if (this.creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(droppedEnergy);
+                this.creep.moveToIfAble(droppedEnergy);
         }
+        // creep not full withdraw energy
         else {
             var source = this.depositManager.storage;
             if (!source)
                 source = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToWithdraw());
 
             if (source && source.transfer(this.creep, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(source);
+                this.creep.moveToIfAble(source);
         }
     }
     // creep should deposit
@@ -67,7 +93,7 @@ creepCarrier.prototype.act = function() {
         var target = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToDeposit());
         if (target != null) {
             if (this.creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(target);
+                this.creep.moveToIfAble(target);
 
             return;
         }
@@ -76,7 +102,7 @@ creepCarrier.prototype.act = function() {
         target = this.creep.pos.findClosestByPath(this.constructionsManager.getNotFullTowers());
         if (target != null) {
             if (this.creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(target);
+                this.creep.moveToIfAble(target);
 
                 return;
         }
@@ -102,14 +128,14 @@ creepCarrier.prototype.act = function() {
             }
 
             if (this.creep.repair(target) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(target);
+                this.creep.moveToIfAble(target);
 
             return;
         }
 
         // upgrade controller - if happens i'm in a very good shape
         if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
-            this.creep.moveTo(this.creep.room.controller);
+            this.creep.moveToIfAble(this.creep.room.controller);
     }
 };
 

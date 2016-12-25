@@ -1,3 +1,6 @@
+require('SpawnFunctions')();
+require('CreepFunctions')();
+
 var consts = require('Constants');
 //var roleHarvester = require('role.harvester');
 //var roleUpgrader = require('role.upgrader');
@@ -13,8 +16,10 @@ const profiler = require('profiler');
 
 // TODO : implement semi-automatic claiming - did : claimer will spawn, claim the room, and start....
 // TODO : building the spawn(spawn will not be placed), need to do : send builders to complete the spawn (implement request for reinforcements)
-
+// TODO : check pick up dropped energy
 // TODO : implement attack/defense strategy
+// TODO : pass memory parameter when spawning creeps
+// TODO : implement lab workers (CreepChemist)
 
 module.exports.loop = function  () {
     profiler.wrap(function() {

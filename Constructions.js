@@ -6,9 +6,9 @@ var CONST = {
 };
 var Cache = require('Cache');
 
-function Constructions(room, buildQueue) {
+function Constructions(room, roomMemoryObject) {
     this.room = room;
-    this.buildQueue = buildQueue;
+    this.buildQueue = roomMemoryObject.buildQueue;
     this.buildQueueObjects = [];
     this.cache = new Cache();
     this.sites = this.room.find(FIND_CONSTRUCTION_SITES);
@@ -46,7 +46,7 @@ Constructions.prototype.getDamagedStructures = function() {
                 FIND_STRUCTURES,
                 {
                     filter: function(s) {
-                        // TODO : save the hostile creeps variable for reuse
+                        // OPTIMIZATION : save the hostile creeps variable for reuse
                         /*var hostileCreeps = this.cache.remember(
                             'hostile-creeps-' + this.room.name,
                             function() {
@@ -79,7 +79,7 @@ Constructions.prototype.getUpgradeableStructures = function() {
                 FIND_STRUCTURES,
                 {
                     filter: function(s) {
-                        // TODO : save the hostile creeps variable for reuse
+                        // OPTIMIZATION : save the hostile creeps variable for reuse
                         /*var hostileCreeps = this.cache.remember(
                             'hostile-creeps-' + this.room.name,
                             function() {
@@ -148,13 +148,13 @@ Constructions.prototype.constructStructure = function(creep) {
     if (site != undefined) {
         if (build) {
             if (creep.creep.build(site) == ERR_NOT_IN_RANGE)
-                creep.creep.moveTo(site);
-                //creep.creep.moveTo(site, {avoid: avoidArea});
+                creep.creep.moveToIfAble(site);
+                //creep.creep.moveToIfAble(site, {avoid: avoidArea});
         }
         else {
             if (creep.creep.repair(site) == ERR_NOT_IN_RANGE)
-                creep.creep.moveTo(site);
-                //creep.creep.moveTo(site, {avoid: avoidArea});
+                creep.creep.moveToIfAble(site);
+                //creep.creep.moveToIfAble(site, {avoid: avoidArea});
         }
         
         return true;

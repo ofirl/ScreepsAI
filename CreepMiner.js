@@ -58,11 +58,11 @@ creepMiner.prototype.act = function() {
             if (this.creep.pos.isEqualTo(this.container.pos))
                 this.creep.harvest(this.resource);
             else
-                this.creep.moveTo(this.container);
+                this.creep.moveToIfAble(this.container);
         }
         else {
             if (this.creep.harvest(this.resource) == ERR_NOT_IN_RANGE)
-                this.creep.moveTo(this.resource);
+                this.creep.moveToIfAble(this.resource);
         }
     }
     // creep should deposit
@@ -71,18 +71,18 @@ creepMiner.prototype.act = function() {
             var storage = this.creep.pos.findClosestByPath(this.depositManager.getAvailableContainersToDeposit());
             if (storage != undefined) {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                    this.creep.moveTo(storage);
+                    this.creep.moveToIfAble(storage);
             }
             else {
                 if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE)
-                    this.creep.moveTo(this.creep.room.controller);
+                    this.creep.moveToIfAble(this.creep.room.controller);
             }
         }
         else {
             var storage = this.creep.pos.findClosestByPath(this.depositManager.extensions.concat(this.depositManager.spawns), {filter: minerStructureFilter});
             if (storage != undefined) {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-                    this.creep.moveTo(storage);
+                    this.creep.moveToIfAble(storage);
             }
         }
     }

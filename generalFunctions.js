@@ -1,4 +1,3 @@
-require('SpawnFunctions')();
 var CreepClaimer = require('CreepClaimer');
 var CreepScout = require('CreepScout');
 var CreepBase = require('CreepBase');
@@ -46,18 +45,6 @@ generalFunctions.updateTicksToScout = function (rooMemoryObject, num) {
         
         Memory.rooms[r].ticksToScout = num;
         return;
-    }
-};
-
-// operate towers
-generalFunctions.operateTowers = function () {
-    var towers = Game.rooms.W2N5.find(FIND_STRUCTURES, {
-        filter : (s) => s.structureType == STRUCTURE_TOWER
-    });
-    for (let tower of towers) {
-        var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if (target != undefined)
-            tower.attack(target);
     }
 };
 
