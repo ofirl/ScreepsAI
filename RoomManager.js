@@ -155,7 +155,8 @@ roomManager.prototype.populate = function() {
                     this.creepFactory.new(Constants.ROLE_CLAIMER, this.depositManager.getSpawnDeposit());
                     var roomObject = {
                         name : Memory.claimRoom,
-                        spawnScout : false,
+                        longDistanceMining : [],
+                        scoutNeeded : false,
                         ticksToScout : 0,
                         report : true,
                         buildQueue : [],
