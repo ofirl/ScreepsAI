@@ -31,7 +31,9 @@ creepClaimer.prototype.init = function(constructionsManager, resourceManager) {
         this.remember('last-action', ACTIONS.CLAIM);
 
     //if(this.randomMovement() == false) {
-    this.act();
+    // TODO : check this is working correctly
+    if (this.constructionsManager)
+        this.act();
     //}
 };
 

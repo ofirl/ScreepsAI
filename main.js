@@ -81,7 +81,7 @@ module.exports.loop = function  () {
                 generalFunctions.runClaimers(creep);
                 break;
             case 'CreepScout' :
-                generalFunctions.runScouts(creep);
+                //generalFunctions.runScouts(creep);
                 break;
         }
     }
