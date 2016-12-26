@@ -36,9 +36,9 @@ function roomManager(room, roomHandler, roomMemoryObject) {
         (this.resourceManager.mineral && this.resourceManager.mineral.mineralAmount > 0 && this.depositManager.storage.store['H'] < 250000) ? 1 : 0;
     this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.defenseManager, this.population, this.roomHandler);
 
-    Memory.stats["room." + room.name + ".energyAvailable"] = room.energyAvailable;
-    Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
-    Memory.stats["room." + room.name + ".controllerProgress"] = room.controller.progress;
+    //Memory.stats["room." + room.name + ".energyAvailable"] = room.energyAvailable;
+    //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
+    //Memory.stats["room." + room.name + ".controllerProgress"] = room.controller.progress;
 }
 
 roomManager.prototype.loadCreeps = function() {
