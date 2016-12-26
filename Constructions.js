@@ -1,12 +1,16 @@
+var globals = require('Globals');
+
 var CONST = {
     RAMPART_MAX: 1,
     RAMPART_FIX: 0.10,
-    STANDARD_FIX: 0.90,
+    STANDARD_FIX: 0.50,
     STANDARD_MAX : 1,
 };
 var Cache = require('Cache');
 
 function Constructions(room, roomMemoryObject) {
+    var cpuTime = Game.cpu.getUsed();
+
     this.room = room;
     this.buildQueue = roomMemoryObject.buildQueue;
     this.buildQueueObjects = [];
@@ -34,8 +38,10 @@ function Constructions(room, roomMemoryObject) {
     if (changed)
         this.saveBuildQueueToMemory();
 
-    //this.upgradeableStructures = this.getUpgradeableStructures();
     this.controller = this.room.controller;
+
+    var cpuUsed = Game.cpu.getUsed() - cpuTime;
+    globals.addValue('constructionManager', cpuUsed);
 };
 
 Constructions.prototype.getDamagedStructures = function() {

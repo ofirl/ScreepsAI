@@ -20,7 +20,7 @@ function DefenseManager(room, roomMemoryObject) {
         }
     );
 
-    //console.log(roomMemoryObject.scoutNeeded)
+    Memory.stats['room.' + room.name + '.defenderIndex'] = this.hostileCreeps.length;
 }
 
 DefenseManager.prototype.getHostileCreeps = function () {
