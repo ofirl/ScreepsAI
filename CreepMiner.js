@@ -84,6 +84,11 @@ creepMiner.prototype.act = function() {
                 if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
                     this.creep.moveToIfAble(storage);
             }
+            else {
+                storage = this.creep.room.controller;
+                if (this.creep.upgradeController(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                    this.creep.moveToIfAble(storage);
+            }
         }
     }
 };
