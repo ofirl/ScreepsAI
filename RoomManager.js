@@ -143,7 +143,7 @@ roomManager.prototype.populate = function() {
                         continue;
 
                     if (ctype.total < ctype.max) {
-                        name = this.creepFactory.new(ctype.type, this.depositManager.getSpawnDeposit());
+                        this.creepFactory.new(ctype.type, this.depositManager.getSpawnDeposit());
                         spawnType = ctype.type;
                         break;
                     }
