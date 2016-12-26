@@ -90,6 +90,7 @@ module.exports.loop = function  () {
         }
     }
 
+        require('stats')();
 
     });
 };
