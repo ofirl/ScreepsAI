@@ -27,8 +27,6 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     if (this.room.storage)
         this.population.typeDistribution.CreepBuilder.max += Math.floor(this.room.storage.store.energy / 250000);
     this.population.typeDistribution.CreepMiner.max = this.resourceManager.getSources().length;
-    if (this.room.controller.level < 4)
-        this.population.typeDistribution.CreepMiner.max += 2;
     this.population.typeDistribution.CreepLongDistanceMiner.max =
         this.roomMemoryObject.longDistanceMining ? this.roomMemoryObject.longDistanceMining.length : 0;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;
