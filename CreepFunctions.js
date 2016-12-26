@@ -16,8 +16,10 @@ module.exports = function() {
                 return ERR_NOT_ENOUGH_RESOURCES;
 
             for (var resourceType in this.carry) {
-                var result = this.transfer(target, resourceType);
-                if (result != OK)
+                var result = false;
+                if (this.carry[resourceType] != 0)
+                    result = this.transfer(target, resourceType);
+                if (result && result != OK)
                     return result;
             }
 

@@ -25,6 +25,8 @@ module.exports.loop = function  () {
     profiler.wrap(function() {
         // Main.js logic should go here.
 
+        PathFinder.use(true);
+
     // clear memory
     generalFunctions.clearMemory();
     

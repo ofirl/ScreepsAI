@@ -128,7 +128,7 @@ roomManager.prototype.populate = function() {
                     (!ctype.requireStorage || (ctype.requireStorage && this.room.storage != undefined)) &&
                     (!ctype.requireContainer || (ctype.requireContainer && this.depositManager.resourceContainers.length > 0))) {
 
-                    if (ctype.type == Constants.ROLE_LONG_DISTANCE_MINER && (!this.roomMemoryObject.longDistanceMining ||
+                    if (ctype.type == Constants.ROLE_LONG_DISTANCE_MINER && !this.roomMemoryObject.scoutNeeded && (!this.roomMemoryObject.longDistanceMining ||
                         this.roomMemoryObject.longDistanceMining.length == 0))
                         continue;
 

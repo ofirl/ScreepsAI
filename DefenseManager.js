@@ -19,6 +19,8 @@ function DefenseManager(room, roomMemoryObject) {
             filter : (c) => c.hits < c.hitsMax
         }
     );
+
+    //console.log(roomMemoryObject.scoutNeeded)
 }
 
 DefenseManager.prototype.getHostileCreeps = function () {

@@ -31,7 +31,7 @@ creepScout.prototype.init = function() {
     if(this.moveToNewRoom() == true) {
         return;
     }
-
+    
     if (!this.remember('scouting-route')) {
         for (var i = 0; i < Memory.scoutingRoutes.length; i++) {
             var route = Memory.scoutingRoutes[i];

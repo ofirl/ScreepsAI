@@ -24,7 +24,10 @@ creepLongDistanceMiner.prototype.init = function() {
     }*/
 
     // hostiles detected
-    if (this.creep.room == this.remember('targetResourceRoom') && this.defenseManager.hostileCreeps.length > 0) {
+    if (this.creep.room.name == this.remember('targetResourceRoom') && this.defenseManager.hostileCreeps.length > 0) {
+        console.log('call for backup' + this.creep.room + 'from' + this.remember('srcStorageRoom'))
+        this.creep.say('backup');
+        
         this.remember('previous-role', this.creep.memory.role);
         var safeRoom = this.remember('srcStorageRoom');
         this.defenseManager.callForScout(safeRoom);
@@ -94,14 +97,14 @@ creepLongDistanceMiner.prototype.act = function() {
         else {
             var storage = this.depositManager.room.storage;
             if (storage != undefined) {
-                if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                if (this.creep.emptyCarry(storage) == ERR_NOT_IN_RANGE)
                     this.creep.moveToIfAble(storage);
             }
             // should never happen - long distance mining = got storage already
             else {
                 storage = this.creep.pos.findClosestByPath(this.depositManager.getAvailableContainersToDeposit());
                 if (storage != undefined) {
-                    if (this.creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                    if (this.creep.emptyCarry(storage) == ERR_NOT_IN_RANGE)
                         this.creep.moveToIfAble(storage);
                 }
             }
