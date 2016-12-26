@@ -4,6 +4,7 @@ var Population = require('Population');
 var Resources = require('Resources');
 var Constructions = require('Constructions');
 var DefenseManager = require('DefenseManager');
+var MarketManager = require('MarketManager');
 var Constants = require('Constants');
 var generalFunctions = require('generalFunctions');
 
@@ -38,7 +39,8 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     this.population.typeDistribution.CreepLorry.max = this.resourceManager.getSources().length;
     this.population.typeDistribution.CreepHarvester.max =
         (this.resourceManager.mineral && this.resourceManager.mineral.mineralAmount > 0 && this.depositManager.storage.store['H'] < 250000) ? 1 : 0;
-    this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.defenseManager, this.population, this.roomHandler);
+    this.marketManager = new MarketManager(this.room, this.depositManager, this.roomMemoryObject);
+    this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.defenseManager, this.marketManager, this.population, this.roomHandler);
 
     //Memory.stats["room." + room.name + ".energyAvailable"] = room.energyAvailable;
     //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;

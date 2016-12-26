@@ -34,7 +34,7 @@ module.exports = function() {
     Creep.prototype.isFullOfEnergy =
         function() {
             return this.carry.energy == this.carryCapacity;
-        }
+        };
 
     Creep.prototype.isEmpty =
         function() {

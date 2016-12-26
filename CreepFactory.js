@@ -13,12 +13,13 @@ var CreepCarrier = require('CreepCarrier');
 var generalFunctions = require('generalFunctions');
 var Constants = require('Constants');
 
-function creepFactory(depositManager, resourceManager, constructionsManager, defenseManager, population, roomHandler) {
+function creepFactory(depositManager, resourceManager, constructionsManager, defenseManager, marketManager, population, roomHandler) {
     this.depositManager = depositManager;
     this.resourceManager = resourceManager;
     this.population = population;
     this.constructionsManager = constructionsManager;
     this.defenseManager = defenseManager;
+    this.marketManager = marketManager;
     this.roomHandler = roomHandler;
 };
 
@@ -46,7 +47,7 @@ creepFactory.prototype.load = function(creep) {
                 loadedCreep = new CreepScout(creep, this.defenseManager, this.depositManager);
                 break;
             case Constants.ROLE_CARRIER:
-                loadedCreep = new CreepCarrier(creep, this.constructionsManager, this.depositManager, this.defenseManager);
+                loadedCreep = new CreepCarrier(creep, this.constructionsManager, this.depositManager, this.defenseManager, this.marketManager);
                 break;
             case Constants.ROLE_HARVESTER:
                 loadedCreep = new CreepHarvester(creep, this.resourceManager, this.depositManager);

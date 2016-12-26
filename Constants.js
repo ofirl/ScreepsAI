@@ -43,6 +43,11 @@ const maxCreepCost = 1200;
 const minBuildersForUpgraders = 2;
 const numUpgraders = 1;
 
+const MIN_ENERGY_TO_DEAL = 400000; // 400K
+const MIN_MINERAL_TO_DEAL = 100000; // 100K
+const MIN_ORDER_AMOUNT_TO_DEAL = 2000; // 2K
+const MIN_DEAL_AMOUNT = 1000; //1K
+
 module.exports = {
     minHarvesters : minHarvesters,
     minUpgraders : minUpgraders,
@@ -87,4 +92,9 @@ module.exports = {
     HARVESTER_WORK_PARTS : HARVESTER_WORK_PARTS,
     HARVESTER_CARRY_PARTS : HARVESTER_CARRY_PARTS,
     HARVESTER_MOVE_PARTS : HARVESTER_MOVE_PARTS,
+
+    MIN_ENERGY_TO_DEAL : MIN_ENERGY_TO_DEAL,
+    MIN_MINERAL_TO_DEAL : MIN_MINERAL_TO_DEAL,
+    MIN_ORDER_AMOUNT_TO_DEAL : MIN_ORDER_AMOUNT_TO_DEAL,
+    MIN_DEAL_AMOUNT : MIN_DEAL_AMOUNT,
 };

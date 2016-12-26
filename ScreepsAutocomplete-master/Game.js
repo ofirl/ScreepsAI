@@ -439,12 +439,12 @@ Game =
          * @type {function}
          *
          * @param {string} orderId The order ID as provided in Game.market.orders.
-         * @param {string} targetRoomName The name of your room which has to contain an active Terminal with enough amount of energy.
          * @param {number} amount The amount of resources to transfer.
+         * @param {string} myRoomName The name of your room which has to contain an active Terminal with enough amount of energy.
          *
          * @return {number|OK|ERR_NOT_ENOUGH_RESOURCES|ERR_INVALID_ARGS}
          */
-        deal: function(orderId, targetRoomName, amount) { },
+        deal: function(orderId, amount, myRoomName) { },
 
         /**
          * This method is still under development.

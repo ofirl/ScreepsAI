@@ -33,6 +33,7 @@ function Deposits(room) {
     // TODO : refactor dropped energy to droppedResource
     this.droppedEnergy = this.room.find(FIND_DROPPED_RESOURCES);
     this.storage = this.room.storage;
+	this.terminal = this.room.terminal;
 
 	this.spawns = [];
 	for(var n in Game.spawns) {
@@ -236,6 +237,16 @@ Deposits.prototype.getAvailableDepositsToDeposit = function() {
             return empty;
         }.bind(this)
     );
+};
+
+Deposits.prototype.getTerminalNotEnergyResource = function () {
+    if (_.sum(this.terminal.store) != this.terminal.store.energy) {
+        for (var r in this.terminal.store)
+            if (r != RESOURCE_ENERGY)
+                return r;
+    }
+    
+    return RESOURCE_ENERGY;
 };
 
 // PRIVATE
