@@ -9,7 +9,7 @@ var CONST = {
 var Cache = require('Cache');
 
 function Constructions(room, roomMemoryObject) {
-    var cpuTime = Game.cpu.getUsed();
+    //var cpuTime = Game.cpu.getUsed();
 
     this.room = room;
     this.buildQueue = roomMemoryObject.buildQueue;
@@ -40,9 +40,10 @@ function Constructions(room, roomMemoryObject) {
 
     this.controller = this.room.controller;
 
+    /*
     var cpuUsed = Game.cpu.getUsed() - cpuTime;
-    globals.addValue('constructionManager', cpuUsed);
-};
+    globals.addValue('constructionManager', cpuUsed);*/
+}
 
 Constructions.prototype.getDamagedStructures = function() {
     return this.cache.remember(
