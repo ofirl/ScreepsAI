@@ -70,7 +70,7 @@ Constructions.prototype.getDamagedStructures = function() {
                             return false;
 
                         // TODO : change back when colony is up and running
-                        if (s.structureType == STRUCTURE_ROAD && s.hits > 2000)
+                        if (s.structureType == STRUCTURE_ROAD && s.hits > 1999)
                             return false;
 
                         if((s.hits / s.hitsMax < CONST.STANDARD_FIX && s.structureType != STRUCTURE_RAMPART) || (s.structureType == STRUCTURE_RAMPART && s.hits / s.hitsMax < CONST.RAMPART_FIX))
