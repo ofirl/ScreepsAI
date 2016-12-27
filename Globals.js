@@ -13,7 +13,7 @@ var globalVars = {
 };
 
 function Globals() {
-    this.vars = globalVars;
+    var vars = globalVars;
 }
 
 Globals.get = function (key) {

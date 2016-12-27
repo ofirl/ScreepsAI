@@ -1,5 +1,5 @@
 // Put in your main loop
-var globals = require('Globals');
+//var globals = require('Globals');
 
 module.exports = function () {
     if (Memory.stats == undefined) {
@@ -38,7 +38,7 @@ module.exports = function () {
     Memory.stats['cpu.limit'] = Game.cpu.limit;
     Memory.stats['cpu.getUsed'] = Game.cpu.getUsed();
 
-    Memory.stats['cpu.SetupRoles'] = globals.get('rolesSetup');
+    //Memory.stats['cpu.SetupRoles'] = globals.get('rolesSetup');
     /*
     Memory.stats['cpu.CreepManagers'] = creepManagement
     Memory.stats['cpu.Towers'] = towersRunning
