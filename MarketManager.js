@@ -54,6 +54,7 @@ MarketManager.prototype.getAvailableResourceAmount = function (resource) {
 
 // parameters are opts
 MarketManager.prototype.getOrders = function (orderType, resourceType, remainingAmount) {
+    console.log(orderType + " " + resourceType + " " + remainingAmount);
     return Game.market.getAllOrders(
         {
             filter : (order) => {
