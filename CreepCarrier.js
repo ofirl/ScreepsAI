@@ -71,18 +71,20 @@ creepCarrier.prototype.act = function() {
         }
 
         var resourceType = RESOURCE_ENERGY;
-        if (this.currentOrder) {
-            if (this.depositManager.terminal.store.energy >= this.marketManager.getCurrentOrderTransferCost())
-                resourceType = this.currentOrder.resourceType;
-        }
-        else {
-            var terminalResource = this.depositManager.getTerminalNotEnergyResource(); 
-            if (terminalResource != RESOURCE_ENERGY) {
-                target = this.creep.room.terminal;
-                if (this.creep.withdraw(target, terminalResource) == ERR_NOT_IN_RANGE)
-                    this.creep.moveToIfAble(target);
+        if (this.creep.room.terminal) {
+            if (this.currentOrder) {
+                if (this.depositManager.terminal.store.energy >= this.marketManager.getCurrentOrderTransferCost())
+                    resourceType = this.currentOrder.resourceType;
+            }
+            else {
+                var terminalResource = this.depositManager.getTerminalNotEnergyResource();
+                if (terminalResource != RESOURCE_ENERGY) {
+                    target = this.creep.room.terminal;
+                    if (this.creep.withdraw(target, terminalResource) == ERR_NOT_IN_RANGE)
+                        this.creep.moveToIfAble(target);
 
-                return;
+                    return;
+                }
             }
         }
         

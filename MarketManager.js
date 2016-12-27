@@ -14,9 +14,19 @@ function MarketManager(room, depositManager, roomMemoryObject) {
     this.storage = this.depositManager.storage;
     this.roomMemoryObject = roomMemoryObject;
     this.availableResources = this.getAvailableResources();
+    this.checkMarketCounter = this.roomMemoryObject.checkMarketCounter;
+    if (!this.checkMarketCounter)
+        this.roomMemoryObject.checkMarketCounter = 0;
+    else
+        this.roomMemoryObject.checkMarketCounter--;
 
     if (!this.roomMemoryObject.currentOrder)
         this.roomMemoryObject.currentOrder = false;
+
+    if (this.checkMarketCounter == 0) {
+        var bestProfitOrder = this.findBestCreditProfitOrder(RESOURCE_ENERGY);
+        this.roomMemoryObject.checkMarketCounter = Constants.CHECK_MARKET_DELAY;
+    }
 }
 
 MarketManager.prototype.getAvailableResources = function () {
@@ -61,6 +71,13 @@ MarketManager.prototype.getBuyOrders = function (resourceType, remainingAmount) 
     return this.getOrders(CONSTS.BUY, resourceType, remainingAmount);
 };
 
+MarketManager.prototype.getSellOrders = function (resourceType, remainingAmount) {
+    if (!remainingAmount)
+        remainingAmount = Constants.MIN_ORDER_AMOUNT_TO_DEAL;
+
+    return this.getOrders(CONSTS.SELL, resourceType, remainingAmount);
+};
+
 // parameters is opts
 MarketManager.prototype.findBestBuyOrder = function (resourceType) {
     var buyOrders = [];
@@ -86,7 +103,7 @@ MarketManager.prototype.findBestBuyOrder = function (resourceType) {
 };
 
 MarketManager.prototype.findOrder = function () {
-    if (this.availableResources.length == 0 || !this.needNewOrder() || !this.room.storage)
+    if (this.availableResources.length == 0 || !this.needNewOrder() || !this.room.storage || !this.room.terminal)
         return false;
 
     var bestOrder = this.findBestBuyOrder();
@@ -144,7 +161,50 @@ MarketManager.prototype.deal = function () {
     }
 };
 
+MarketManager.prototype.findBestCreditProfitOrder = function (resourceType) {
+    if (!resourceType)
+        resourceType = RESOURCE_ENERGY;
+
+    var buyOrders = this.getBuyOrders(resourceType);
+    var sellOrders = this.getSellOrders(resourceType);
+
+    var bestProfit;
+    var bestBuyId;
+    var bestSellId;
+
+    for (var i = 0; i < buyOrders.length; i++) {
+        var buyOrder = buyOrders[i];
+        for (var j = 0; j < sellOrders.length; j++) {
+            var sellOrder = sellOrders[j];
+            var energyPerCredit = checkEnergyPerCreditProfit(buyOrder, sellOrder);
+            if (energyPerCredit < bestProfit) {
+                bestProfit = energyPerCredit;
+                bestBuyId = buyOrder.id;
+                bestSellId = sellOrder.id;
+            }
+        }
+    }
+
+    console.log(bestProfit);
+    if (bestProfit > 0)
+        return {buyId : bestBuyId, sellId : bestSellId, energyPerCredit : bestProfit};
+
+    return false;
+};
+
 // private
+function checkEnergyPerCreditProfit(buyOrder, sellOrder) {
+    var energyCost = 0;
+    energyCost += Game.market.calcTransactionCost(1000, this.room.name, sellOrder.roomName);
+    energyCost += Game.market.calcTransactionCost(1000, this.room.name, buyOrder.roomName);
+
+    var creditProfit = 0;
+    creditProfit -= sellOrder.price * 1000;
+    creditProfit += buyOrder.price * 1000;
+
+    return energyCost / creditProfit;
+}
+
 function filterOrders(order, orderType, resourceType, remainingAmount) {
     if (orderType && order.type != orderType)
         return false;

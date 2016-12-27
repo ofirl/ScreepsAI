@@ -41,6 +41,10 @@ function roomManager(room, roomHandler, roomMemoryObject) {
         (this.resourceManager.mineral && this.resourceManager.mineral.mineralAmount > 0 && this.depositManager.storage.store['H'] < 250000) ? 1 : 0;
     this.marketManager = new MarketManager(this.room, this.depositManager, this.roomMemoryObject);
     this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.defenseManager, this.marketManager, this.population, this.roomHandler);
+    
+    // TODO : activate when checked
+    //this.marketManager.findOrder();
+    
 
     //Memory.stats["room." + room.name + ".energyAvailable"] = room.energyAvailable;
     //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
