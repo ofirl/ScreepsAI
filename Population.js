@@ -114,6 +114,7 @@ function Population(room) {
         }
         currTypeDistribution.total++;
 
+        // TODO : check why it's not working
         if (creep.ticksToLive < currTypeDistribution.nextDeath)
             currTypeDistribution.nextDeath = creep.ticksToLive;
     }
