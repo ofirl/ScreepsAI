@@ -68,6 +68,7 @@ creepFactory.prototype.load = function(creep) {
                 break;
         }
 
+    // stats collecting
     cpuUsed = Game.cpu.getUsed() - cpuTime;
     globals.addValue('rolesSetup', cpuUsed);
 
@@ -78,8 +79,15 @@ creepFactory.prototype.load = function(creep) {
     if(!loadedCreep)
         return false;
 
+    // stats setup
+    cpuTime = Game.cpu.getUsed();
+
     generalFunctions.extend(loadedCreep, CreepBase);
     loadedCreep.init();
+
+    // stats collecting
+    cpuUsed = Game.cpu.getUsed() - cpuTime;
+    globals.addValue('CreepFunc', cpuUsed);
 
     return loadedCreep;
 };
