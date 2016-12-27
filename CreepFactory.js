@@ -87,7 +87,7 @@ creepFactory.prototype.load = function(creep) {
 
     // stats collecting
     cpuUsed = Game.cpu.getUsed() - cpuTime;
-    globals.addValue('CreepFunc', cpuUsed);
+    globals.addValue('creepFunc', cpuUsed);
 
     return loadedCreep;
 };
