@@ -25,7 +25,7 @@ function MarketManager(room, depositManager, roomMemoryObject) {
 
     if (this.checkMarketCounter == 0) {
         var bestProfitOrder = this.findBestCreditProfitOrder(RESOURCE_ENERGY);
-        console.log(JSON.stringify(bestProfitOrder));
+        //console.log(JSON.stringify(bestProfitOrder));
         this.roomMemoryObject.checkMarketCounter = Constants.CHECK_MARKET_DELAY;
     }
 }
@@ -55,7 +55,6 @@ MarketManager.prototype.getAvailableResourceAmount = function (resource) {
 
 // parameters are opts
 MarketManager.prototype.getOrders = function (orderType, resourceType, remainingAmount) {
-    console.log(orderType + " " + resourceType + " " + remainingAmount);
     return Game.market.getAllOrders(
         (order) => {
             return filterOrders(order, orderType, resourceType, remainingAmount);
