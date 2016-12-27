@@ -1,22 +1,27 @@
 
+var globalVars = {
+    //stats vars
+    init: 0,
+    creepsManagement: 0,
+    rolesSetup : 0,
+    defenseManager: 0,
+    constructionManager: 0,
+    depositManager: 0,
+    resourceManager: 0,
+    populationManager: 0,
+    sumOfProfiler: 0,
+};
+
 function Globals() {
-    this.init = 0;
-    this.creepsManagement = 0;
-    // to make a diff
-    this.defenseManager = 0;
-    this.constructionManager = 0;
-    this.depositManager = 0;
-    this.resourceManager = 0;
-    this.populationManager = 0;
-    this.sumOfProfiler = 0;
+    this.vars = globalVars;
 }
 
 Globals.prototype.get = function (key) {
-    return this[key];
+    return this.vars[key];
 };
 
 Globals.prototype.addValue = function (key, value) {
-    this[key] += value;
+    this.vars[key] += value;
 };
 
 module.exports = Globals;

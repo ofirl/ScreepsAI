@@ -12,6 +12,7 @@ var CreepCarrier = require('CreepCarrier');
 
 var generalFunctions = require('generalFunctions');
 var Constants = require('Constants');
+var globals = require('Globals');
 
 function creepFactory(depositManager, resourceManager, constructionsManager, defenseManager, marketManager, population, roomHandler) {
     this.depositManager = depositManager;
@@ -24,6 +25,10 @@ function creepFactory(depositManager, resourceManager, constructionsManager, def
 };
 
 creepFactory.prototype.load = function(creep) {
+    //stats setup
+    var cpuTime = Game.cpu.getUsed();
+    var cpuUsed = 0;
+
     var loadedCreep = null;
     var role = creep.memory.role;
     //should never happen
@@ -62,6 +67,9 @@ creepFactory.prototype.load = function(creep) {
                 //loadedCreep = new CreepShooter(creep);
                 break;
         }
+
+    cpuUsed = Game.cpu.getUsed() - cpuTime;
+    globals.addValue('rolesSetup', cpuUsed);
 
     // a useless lazy bastard without a role - should never happen!
     //else
