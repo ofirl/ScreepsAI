@@ -16,11 +16,11 @@ function Globals() {
     this.vars = globalVars;
 }
 
-Globals.prototype.get = function (key) {
+Globals.get = function (key) {
     return this.vars[key];
 };
 
-Globals.prototype.addValue = function (key, value) {
+Globals.addValue = function (key, value) {
     this.vars[key] += value;
 };
 
