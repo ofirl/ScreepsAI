@@ -44,8 +44,8 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     
     // TODO : activate and check
     //this.marketManager.findOrder();
-    
 
+    // TODO : add stats collecting
     //Memory.stats["room." + room.name + ".energyAvailable"] = room.energyAvailable;
     //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
     //Memory.stats["room." + room.name + ".controllerProgress"] = room.controller.progress;
@@ -122,7 +122,8 @@ roomManager.prototype.populate = function() {
         if (this.depositManager.spawns[i].spawning)
             continue;
 
-        if (this.population.typeDistribution.CreepMiner.total == 0)
+        // priority spawning
+        if (this.population.typeDistribution.CreepMiner.total == 0 || this.population.typeDistribution.CreepMiner.nextDeath < Constants.MINER_DEATH_SPAWN_TICKS)
             this.creepFactory.new(Constants.ROLE_MINER, this.depositManager.getSpawnDeposit());
         if (this.population.typeDistribution.CreepLorry.total == 0 && this.room.storage)
             this.creepFactory.new(Constants.ROLE_LORRY, this.depositManager.getSpawnDeposit());
