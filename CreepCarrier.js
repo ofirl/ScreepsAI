@@ -119,11 +119,11 @@ creepCarrier.prototype.act = function() {
                 return;
             }
 
-            // find damaged walls
-            target = this.constructionsManager.getDamagedWalls();
-            if (target != null) {
-                var newWallNeeded = false;
-                var wallId = this.remember('repair-wall');
+        // find damaged walls - fix them only if storage exists (RCL 4)
+        target = this.constructionsManager.getDamagedWalls();
+        if (target != null && this.depositManager.storage) {
+            var newWallNeeded = false;
+            var wallId = this.remember('repair-wall');
 
                 if (wallId != 0) {
                     target = this.constructionsManager.getConstructionSiteById(wallId);
