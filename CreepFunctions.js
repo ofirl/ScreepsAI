@@ -8,7 +8,7 @@ module.exports = function() {
                 return this.moveTo(target, opts);
 
             return ERR_TIRED;
-    }
+    };
 
     Creep.prototype.emptyCarry =
         function(target) {
@@ -39,5 +39,10 @@ module.exports = function() {
     Creep.prototype.isEmpty =
         function() {
             return _.sum(this.carry) == 0
+        }
+
+    Creep.prototype.isCarryResource =
+        function() {
+            return _.sum(this.carry) != this.carry.energy;
         }
 };

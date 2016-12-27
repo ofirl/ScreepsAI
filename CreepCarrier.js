@@ -99,7 +99,7 @@ creepCarrier.prototype.act = function() {
     // creep should deposit
     else {
         // creep carry energy
-        if (this.creep.isFullOfEnergy()) {
+        if (!this.creep.isCarryResource()) {
 
             // find not full extensions/spawn
             var target = this.creep.pos.findClosestByPath(this.depositManager.getAvailableDepositsToDeposit());
