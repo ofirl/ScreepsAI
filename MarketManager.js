@@ -25,6 +25,7 @@ function MarketManager(room, depositManager, roomMemoryObject) {
 
     if (this.checkMarketCounter == 0) {
         var bestProfitOrder = this.findBestCreditProfitOrder(RESOURCE_ENERGY);
+        console.log(JSON.stringify(bestProfitOrder));
         this.roomMemoryObject.checkMarketCounter = Constants.CHECK_MARKET_DELAY;
     }
 }
@@ -167,9 +168,6 @@ MarketManager.prototype.findBestCreditProfitOrder = function (resourceType) {
     var buyOrders = this.getBuyOrders(resourceType);
     var sellOrders = this.getSellOrders(resourceType);
 
-    console.log(buyOrders);
-    console.log(sellOrders);
-
     var bestProfit = 1000000;
     var bestBuyId;
     var bestSellId;
@@ -187,7 +185,6 @@ MarketManager.prototype.findBestCreditProfitOrder = function (resourceType) {
         }
     }
 
-    console.log(bestProfit);
     if (bestProfit && bestProfit > 0)
         return {buyId : bestBuyId, sellId : bestSellId, energyPerCredit : bestProfit};
 
