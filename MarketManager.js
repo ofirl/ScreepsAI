@@ -179,7 +179,7 @@ MarketManager.prototype.findBestCreditProfitOrder = function (resourceType) {
         for (var j = 0; j < sellOrders.length; j++) {
             var sellOrder = sellOrders[j];
             var energyPerCredit = this.checkEnergyPerCreditProfit(buyOrder, sellOrder);
-            if (energyPerCredit < bestProfit) {
+            if (energyPerCredit > 0 && energyPerCredit < bestProfit) {
                 bestProfit = energyPerCredit;
                 bestBuyId = buyOrder.id;
                 bestSellId = sellOrder.id;
