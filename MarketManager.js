@@ -17,13 +17,13 @@ function MarketManager(room, depositManager, roomMemoryObject) {
     this.checkMarketCounter = this.roomMemoryObject.checkMarketCounter;
     if (!this.checkMarketCounter)
         this.roomMemoryObject.checkMarketCounter = 0;
-    else
+    else if (this.roomMemoryObject.checkMarketCounter > 0)
         this.roomMemoryObject.checkMarketCounter--;
 
     if (!this.roomMemoryObject.currentOrder)
         this.roomMemoryObject.currentOrder = false;
 
-    if (this.checkMarketCounter == 0) {
+    if (this.room.terminal && this.checkMarketCounter == 0) {
         var bestProfitOrder = this.findBestCreditProfitOrder(RESOURCE_ENERGY);
         //console.log(JSON.stringify(bestProfitOrder));
         this.roomMemoryObject.checkMarketCounter = Constants.CHECK_MARKET_DELAY;

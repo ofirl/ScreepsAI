@@ -42,7 +42,7 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     this.marketManager = new MarketManager(this.room, this.depositManager, this.roomMemoryObject);
     this.creepFactory = new CreepFactory(this.depositManager, this.resourceManager, this.constructionManager, this.defenseManager, this.marketManager, this.population, this.roomHandler);
     
-    // TODO : activate when checked
+    // TODO : activate and check
     //this.marketManager.findOrder();
     
 
