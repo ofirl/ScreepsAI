@@ -170,7 +170,7 @@ MarketManager.prototype.findBestCreditProfitOrder = function (resourceType) {
     console.log(buyOrders);
     console.log(sellOrders);
 
-    var bestProfit;
+    var bestProfit = 1000000;
     var bestBuyId;
     var bestSellId;
 
