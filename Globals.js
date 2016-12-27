@@ -13,15 +13,14 @@ var globalVars = {
 };
 
 function Globals() {
-    var vars = globalVars;
 }
 
 Globals.get = function (key) {
-    return this.vars[key];
+    return globalVars[key];
 };
 
 Globals.addValue = function (key, value) {
-    this.vars[key] += value;
+    globalVars[key] += value;
 };
 
 module.exports = Globals;
