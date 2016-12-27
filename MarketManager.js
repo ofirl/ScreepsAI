@@ -178,7 +178,7 @@ MarketManager.prototype.findBestCreditProfitOrder = function (resourceType) {
         var buyOrder = buyOrders[i];
         for (var j = 0; j < sellOrders.length; j++) {
             var sellOrder = sellOrders[j];
-            var energyPerCredit = checkEnergyPerCreditProfit(buyOrder, sellOrder);
+            var energyPerCredit = this.checkEnergyPerCreditProfit(buyOrder, sellOrder);
             if (energyPerCredit < bestProfit) {
                 bestProfit = energyPerCredit;
                 bestBuyId = buyOrder.id;
@@ -188,14 +188,13 @@ MarketManager.prototype.findBestCreditProfitOrder = function (resourceType) {
     }
 
     console.log(bestProfit);
-    if (bestProfit > 0)
+    if (bestProfit && bestProfit > 0)
         return {buyId : bestBuyId, sellId : bestSellId, energyPerCredit : bestProfit};
 
     return false;
 };
 
-// private
-function checkEnergyPerCreditProfit(buyOrder, sellOrder) {
+MarketManager.prototype.checkEnergyPerCreditProfit = function (buyOrder, sellOrder) {
     var energyCost = 0;
     energyCost += Game.market.calcTransactionCost(1000, this.room.name, sellOrder.roomName);
     energyCost += Game.market.calcTransactionCost(1000, this.room.name, buyOrder.roomName);
@@ -205,8 +204,9 @@ function checkEnergyPerCreditProfit(buyOrder, sellOrder) {
     creditProfit += buyOrder.price * 1000;
 
     return energyCost / creditProfit;
-}
+};
 
+// private
 function filterOrders(order, orderType, resourceType, remainingAmount) {
     if (orderType && order.type != orderType)
         return false;
