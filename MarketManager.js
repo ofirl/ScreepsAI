@@ -213,7 +213,7 @@ function filterOrders(order, orderType, resourceType, remainingAmount) {
         return false;
     if (resourceType && order.resourceType != resourceType)
         return false;
-    if (remainingAmount && order.remainingAmount != remainingAmount)
+    if (remainingAmount && order.remainingAmount < remainingAmount)
         return false;
 
     return true;
