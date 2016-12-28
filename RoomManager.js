@@ -89,7 +89,7 @@ roomManager.prototype.distributeBuilders = function() {
     }
     else {
         var dedicatedBuilders = builderStats.total > Constants.minBuildersForDedicatedBuilders;
-        console.log(dedicatedBuilders);
+        //console.log(dedicatedBuilders);
         var c = 0;
         for(var i = 0; i < this.creeps.length; i++) {
             var creep = this.creeps[i];
@@ -100,10 +100,10 @@ roomManager.prototype.distributeBuilders = function() {
                 creep.remember('force-controller-upgrade', true);
                 creep.remember('dedicated-builder', false);
             }
-            else if (dedicatedBuilders && c < Constants.numDedicatedBuilders) {
+            else if (dedicatedBuilders && c < Constants.numUpgraders + Constants.numDedicatedBuilders) {
                 creep.remember('force-controller-upgrade', false);
                 creep.remember('dedicated-builder', true);
-                console.log('dedicated builder');
+                //console.log('dedicated builder');
             }
             else {
                 creep.remember('force-controller-upgrade', false);
