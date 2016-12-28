@@ -59,7 +59,7 @@ module.exports = function() {
 
     StructureSpawn.prototype.spawnLorry =
         function(energy) {
-            var numberOfParts = Math.min(Math.floor(energy / 50), Constants.MAX_LORRY_CARRY_PARTS);
+            var numberOfParts = Math.min(Math.floor(energy / 50), Constants.MAX_LORRY_CARRY_PARTS * 1.5);
             var moveParts = Math.floor(numberOfParts / 3);
             var carryParts = numberOfParts - moveParts;
             if (carryParts == 0)
