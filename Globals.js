@@ -13,6 +13,15 @@ var globalVars = {
     sumOfProfiler: 0,
 };
 
+var actionsQueue = [];
+/*
+{
+    who
+    what
+    where
+}
+ */
+
 function Globals() {
 }
 
@@ -25,6 +34,8 @@ Globals.addValue = function (key, value) {
 };
 
 Globals.reset = function () {
+    actionsQueue = [];
+
     for (var n in globalVars)
         globalVars[n] = 0;
 };
