@@ -27,7 +27,6 @@ module.exports.loop = function  () {
         // Main.js logic should go here.
 
         globals.reset();
-        console.log(globals.get('creepFunc'));
         PathFinder.use(true);
 
         // clear memory
@@ -59,11 +58,9 @@ module.exports.loop = function  () {
                 continue;
 
             var room = rooms[Game.rooms[n]];
-            console.log(globals.get('creepFunc'));
             room.loadCreeps();
             room.populate();
             room.defend();
-            console.log(globals.get('creepFunc'));
 
             if (!roomMemoryObject.report)
                 continue;
