@@ -130,7 +130,7 @@ function Population(room) {
         var creep = Game.creeps[c];
         if (creep.memory.role == 'CreepLongDistanceMiner' && creep.memory['srcStorageRoom'] == this.room.name) {
             this.typeDistribution.CreepLongDistanceMiner.total++;
-            console.log(creep.name);
+            //console.log(creep.name);
         }
     }
     /*this.typeDistribution.CreepLongDistanceMiner.total = Game.find(FIND_MY_CREEPS, {
