@@ -140,6 +140,8 @@ roomManager.prototype.populate = function() {
     if (this.depositManager.spawns.length == 0 && this.population.getTotalPopulation() < 10) {
         //this.askForReinforcements()
     }
+    
+    console.log(this.population.typeDistribution.CreepLongDistanceMiner.total);
 
     for (var i = 0; i < this.depositManager.spawns.length; i++) {
         if (this.depositManager.spawns[i].spawning)
