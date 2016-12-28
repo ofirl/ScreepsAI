@@ -14,7 +14,8 @@ function Population(room) {
 			max: 5,
 			minExtensions: 0,
             requireStorage : false,
-            requireContainer : false
+            requireContainer : false,
+            nextDeath : 2000
 		},
         CreepLorry: {
             type : 'CreepLorry',
@@ -24,7 +25,8 @@ function Population(room) {
             max: 2,
             minExtensions: 0,
             requireStorage : true,
-            requireContainer : true
+            requireContainer : true,
+            nextDeath : 2000
         },
 		CreepBuilder: {
             type : 'CreepBuilder',
@@ -34,7 +36,8 @@ function Population(room) {
 			max: 15,
 			minExtensions: 0,
             requireStorage : false,
-            requireContainer : false
+            requireContainer : false,
+            nextDeath : 2000
 		},
         CreepCarrier: {
             type : 'CreepCarrier',
@@ -44,7 +47,8 @@ function Population(room) {
             max: 15,
             minExtensions: 0,
             requireStorage : false,
-            requireContainer : true
+            requireContainer : true,
+            nextDeath : 2000
         },
         CreepLongDistanceMiner: {
             type : 'CreepLongDistanceMiner',
@@ -54,7 +58,8 @@ function Population(room) {
             max: 1,
             minExtensions: 0,
             requireStorage : false,
-            requireContainer : true
+            requireContainer : true,
+            nextDeath : 2000
         },
         CreepHarvester: {
             type : 'CreepHarvester',
@@ -64,7 +69,8 @@ function Population(room) {
             max: 1,
             minExtensions: 0,
             requireStorage : true,
-            requireContainer : false
+            requireContainer : false,
+            nextDeath : 2000
         },/*
 		CreepHealer: {
             type : 'CreepHealer',
@@ -73,7 +79,8 @@ function Population(room) {
 			currentPercentage: 0,
 			max: 2,
 			minExtensions: 2,
-            requireStorage : false
+            requireStorage : false,
+            nextDeath : 2000
 		},
 		CreepSoldier: {
             type : 'CreepSoldier',
@@ -82,7 +89,8 @@ function Population(room) {
 			currentPercentage: 0,
 			max: 5,
 			minExtensions: 2,
-            requireStorage : false
+            requireStorage : false,
+            nextDeath : 2000
 		},
 		CreepShooter: {
             type : 'CreepShooter',
@@ -91,7 +99,8 @@ function Population(room) {
 			currentPercentage: 0,
 			max: 3,
 			minExtensions: 10,
-            requireStorage : false
+            requireStorage : false,
+            nextDeath : 2000
 		}*/
 	};
     
@@ -99,12 +108,18 @@ function Population(room) {
     for(var i = 0; i < this.creeps.length; i++) {
         var creep = this.creeps[i];
         var creepType = creep.memory.role;
-        if(!this.typeDistribution[creepType]) {
-            this.typeDistribution[creepType] = createTypeDistribution(creepType);
+        var currTypeDistribution = this.typeDistribution[creepType];
+        if(currTypeDistribution) {
+            currTypeDistribution = createTypeDistribution(creepType);
         }
-        this.typeDistribution[creepType].total++;
+        currTypeDistribution.total++;
+
+        // TODO : check why it's not working
+        if (creep.ticksToLive < currTypeDistribution.nextDeath)
+            currTypeDistribution.nextDeath = creep.ticksToLive;
     }
 
+    // OPTIMIZATION : need to do it better
     for (let c in Game.creeps) {
         var creep = Game.creeps[c];
         if (creep.memory.role == 'CreepLongDistanceMiner' && creep.memory['srcStorageRoom'] == this.room.name)
@@ -204,7 +219,8 @@ function createTypeDistribution(creepType) {
 		currentPercentage: 0,
 		max: 1,
         requireStorage : false,
-        requireContainer : false
+        requireContainer : false,
+        nextDeath : 2000
 	};
 };
 
