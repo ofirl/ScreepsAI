@@ -114,6 +114,7 @@ function Population(room) {
             this.typeDistribution[creepType] = createTypeDistribution(creepType);
         }
         this.typeDistribution[creepType].total++;
+        console.log(this.typeDistribution[creepType].type + " - " + this.typeDistribution[creepType].total);
 
         // TODO : check why it's not working
         if (creep.ticksToLive < this.typeDistribution[creepType].nextDeath)
