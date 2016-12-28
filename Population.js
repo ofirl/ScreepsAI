@@ -1,4 +1,5 @@
 var Cache = require('Cache');
+var Constants = require('Constants');
 
 function Population(room) {
 	this.cache = new Cache();
@@ -108,6 +109,11 @@ function Population(room) {
     for(var i = 0; i < this.creeps.length; i++) {
         var creep = this.creeps[i];
         var creepType = creep.memory.role;
+
+        // don't count long distance miners, it's happening later
+        if (creepType == Constants.ROLE_LONG_DISTANCE_MINER)
+            continue;
+
         var currTypeDistribution = this.typeDistribution[creepType];
         if(!currTypeDistribution) {
             this.typeDistribution[creepType] = createTypeDistribution(creepType);
@@ -115,7 +121,6 @@ function Population(room) {
         }
         currTypeDistribution.total++;
 
-        // TODO : check why it's not working
         if (creep.ticksToLive < currTypeDistribution.nextDeath)
             currTypeDistribution.nextDeath = creep.ticksToLive;
     }
@@ -123,8 +128,10 @@ function Population(room) {
     // OPTIMIZATION : need to do it better
     for (let c in Game.creeps) {
         var creep = Game.creeps[c];
-        if (creep.memory.role == 'CreepLongDistanceMiner' && creep.memory['srcStorageRoom'] == this.room.name)
+        if (creep.memory.role == 'CreepLongDistanceMiner' && creep.memory['srcStorageRoom'] == this.room.name) {
             this.typeDistribution.CreepLongDistanceMiner.total++;
+            //console.log(creep.name);
+        }
     }
     /*this.typeDistribution.CreepLongDistanceMiner.total = Game.find(FIND_MY_CREEPS, {
         filter : (c) => c.memory.role == 'CreepLongDistanceMining'
