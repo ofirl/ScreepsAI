@@ -41,6 +41,8 @@ const energyDepositsStructures = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE];
 
 const maxCreepCost = 1200;
 const minBuildersForUpgraders = 2;
+const minBuildersForDedicatedBuilders = 4;
+const numDedicatedBuilders = 1;
 const numUpgraders = 1;
 
 const MIN_ENERGY_TO_DEAL = 400000; // 400K
@@ -63,6 +65,8 @@ module.exports = {
     maxCreepCost : maxCreepCost,
     minBuildersForUpgraders : minBuildersForUpgraders,
     numUpgraders : numUpgraders,
+    minBuildersForDedicatedBuilders : minBuildersForDedicatedBuilders,
+    numDedicatedBuilders : numDedicatedBuilders,
 
     ROLE_DEFAULT : ROLE_DEFAULT,
     ROLE_MINER : ROLE_MINER,

@@ -141,7 +141,7 @@ Constructions.prototype.constructStructure = function(creep) {
     var site;
     var build = false;
 
-    if(this.damagedStructures.length != 0) {
+    if (!creep.remember('dedicated-builder') && this.damagedStructures.length != 0) {
         site = creep.creep.pos.findClosestByPath(this.damagedStructures);
         //creep.creep.say('damaged');
     }

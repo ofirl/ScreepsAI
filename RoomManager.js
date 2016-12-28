@@ -84,16 +84,26 @@ roomManager.prototype.distributeBuilders = function() {
                 continue;
 
             creep.remember('force-controller-upgrade', false);
+            creep.remember('dedicated-builder', false);
         }
     }
     else {
+        var dedicatedBuilders = builderStats.total <= Constants.minBuildersForDedicatedBuilders;
         var c = 0;
         for(var i = 0; i < this.creeps.length; i++) {
             var creep = this.creeps[i];
             if(creep.remember('role') != 'CreepBuilder')
                 continue;
 
-            creep.remember('force-controller-upgrade', c < Constants.numUpgraders);
+            if (c < Constants.numUpgraders)
+                creep.remember('force-controller-upgrade', true);
+            else if (dedicatedBuilders && c < Constants.numDedicatedBuilders)
+                creep.remember('dedicated-builder', true);
+            else {
+                creep.remember('force-controller-upgrade', false);
+                creep.remember('dedicated-builder', false);
+            }
+
             c++;
         }
     }
