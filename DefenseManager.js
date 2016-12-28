@@ -21,7 +21,6 @@ function DefenseManager(room, roomMemoryObject) {
         }
     );
 
-    // TODO :check if the memory works like that
     // update counters
     if (roomMemoryObject.ticksToScout && roomMemoryObject.ticksToScout > 0)
         generalFunctions.updateTicksToScout(roomMemoryObject);
@@ -30,6 +29,18 @@ function DefenseManager(room, roomMemoryObject) {
     if (roomMemoryObject.resetScout == 0)
         roomMemoryObject.scoutNeeded = false;
 
+    if (!roomMemoryObject.gatherPoint) {
+        var gatherPoint = this.room.find(FIND_FLAGS,
+            {
+                filter : { name : 'Gathering Point ' + this.room.name}
+            }
+        );
+        if (gatherPoint.length > 0)
+            roomMemoryObject.gatherPoint = gatherPoint[0].pos;
+    }
+    this.gatherPoint = roomMemoryObject.gatherPoint;
+
+    // stats collecting
     Memory.stats['room.' + room.name + '.defenderIndex'] = this.hostileCreeps.length;
 }
 

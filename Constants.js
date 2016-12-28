@@ -51,6 +51,10 @@ const MIN_ORDER_AMOUNT_TO_DEAL = 2000; // 2K
 const MIN_DEAL_AMOUNT = 1000; //1K
 const CHECK_MARKET_DELAY = 50;
 
+const MINER_DEATH_SPAWN_TICKS = 50;
+
+const SOLDIER_FLEE_HP = 0.5;
+
 module.exports = {
     minHarvesters : minHarvesters,
     minUpgraders : minUpgraders,
@@ -103,4 +107,7 @@ module.exports = {
     MIN_ORDER_AMOUNT_TO_DEAL : MIN_ORDER_AMOUNT_TO_DEAL,
     MIN_DEAL_AMOUNT : MIN_DEAL_AMOUNT,
     CHECK_MARKET_DELAY : CHECK_MARKET_DELAY,
+
+    MINER_DEATH_SPAWN_TICKS : MINER_DEATH_SPAWN_TICKS,
+    SOLDIER_FLEE_HP : SOLDIER_FLEE_HP,
 };
