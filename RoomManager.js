@@ -51,6 +51,11 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     //Memory.stats["room." + room.name + ".energyAvailable"] = room.energyAvailable;
     //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
     //Memory.stats["room." + room.name + ".controllerProgress"] = room.controller.progress;
+
+    
+    var flag = this.room.find(FIND_FLAGS)[0];
+    if (this.room.controller.level == 4 && this.room.lookForAt(LOOK_CONSTRUCTION_SITES, flag).length == 0)
+        this.room.createConstructionSite(flag, STRUCTURE_STORAGE);
 }
 
 roomManager.prototype.loadCreeps = function() {
