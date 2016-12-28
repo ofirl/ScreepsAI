@@ -141,6 +141,8 @@ roomManager.prototype.populate = function() {
         //this.askForReinforcements()
     }
 
+    console.log(this.population.typeDistribution.CreepMiner.nextDeath);
+    
     for (var i = 0; i < this.depositManager.spawns.length; i++) {
         if (this.depositManager.spawns[i].spawning)
             continue;
