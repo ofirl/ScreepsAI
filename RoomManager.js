@@ -8,14 +8,14 @@ var MarketManager = require('MarketManager');
 var Constants = require('Constants');
 var generalFunctions = require('generalFunctions');
 
+var globals = require('Globals');
+
 function roomManager(room, roomHandler, roomMemoryObject) {
     this.room = room;
     this.roomHandler = roomHandler;
     this.creeps = [];
     this.structures = [];
     this.roomMemoryObject = roomMemoryObject;
-    if (roomMemoryObject.ticksToScout && roomMemoryObject.ticksToScout > 0)
-        generalFunctions.updateTicksToScout(roomMemoryObject);
 
     this.population = new Population(this.room);
     this.depositManager = new Deposits(this.room);
@@ -25,7 +25,7 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     this.population.typeDistribution.CreepBuilder.max = 3;
     if (this.room.controller.level < 3)
         this.population.typeDistribution.CreepBuilder.max += 1;
-    if (this.room.controller.level < 4)
+    if (this.room.controller.level < 4 || !this.room.storage)
         this.population.typeDistribution.CreepBuilder.max += 2;
     if (this.room.storage)
         this.population.typeDistribution.CreepBuilder.max += Math.floor(this.room.storage.store.energy / 250000);
@@ -34,6 +34,8 @@ function roomManager(room, roomHandler, roomMemoryObject) {
         this.roomMemoryObject.longDistanceMining ? this.roomMemoryObject.longDistanceMining.length : 0;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;
     this.population.typeDistribution.CreepCarrier.max = 2;
+    if (this.room.controller.level < 4)
+        this.population.typeDistribution.CreepCarrier.max += 1;
     if (this.room.storage)
         this.population.typeDistribution.CreepCarrier.max += Math.floor(this.room.storage.store.energy / 250000);
     this.population.typeDistribution.CreepLorry.max = this.resourceManager.getSources().length;
@@ -49,10 +51,15 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     //Memory.stats["room." + room.name + ".energyAvailable"] = room.energyAvailable;
     //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
     //Memory.stats["room." + room.name + ".controllerProgress"] = room.controller.progress;
+
+    /*
+    var flag = this.room.find(FIND_FLAGS)[0];
+    if (this.room.controller.level == 4 && this.room.lookForAt(LOOK_CONSTRUCTION_SITES, flag).length == 0)
+        this.room.createConstructionSite(flag, STRUCTURE_STORAGE);*/
 }
 
 roomManager.prototype.loadCreeps = function() {
-    var creeps = this.room.find(FIND_MY_CREEPS);
+    var creeps = this.population.creeps;
     for(var i = 0; i < creeps.length; i++) {
         var c = this.creepFactory.load(creeps[i]);
         if(c)
@@ -75,16 +82,32 @@ roomManager.prototype.distributeBuilders = function() {
                 continue;
 
             creep.remember('force-controller-upgrade', false);
+            creep.remember('dedicated-builder', false);
         }
     }
     else {
+        var dedicatedBuilders = builderStats.total > Constants.minBuildersForDedicatedBuilders;
+        //console.log(dedicatedBuilders);
         var c = 0;
         for(var i = 0; i < this.creeps.length; i++) {
             var creep = this.creeps[i];
             if(creep.remember('role') != 'CreepBuilder')
                 continue;
 
-            creep.remember('force-controller-upgrade', c < Constants.numUpgraders);
+            if (c < Constants.numUpgraders) {
+                creep.remember('force-controller-upgrade', true);
+                creep.remember('dedicated-builder', false);
+            }
+            else if (dedicatedBuilders && c < Constants.numUpgraders + Constants.numDedicatedBuilders) {
+                creep.remember('force-controller-upgrade', false);
+                creep.remember('dedicated-builder', true);
+                //console.log('dedicated builder');
+            }
+            else {
+                creep.remember('force-controller-upgrade', false);
+                creep.remember('dedicated-builder', false);
+            }
+
             c++;
         }
     }
@@ -143,8 +166,7 @@ roomManager.prototype.populate = function() {
                     (!ctype.requireStorage || (ctype.requireStorage && this.room.storage != undefined)) &&
                     (!ctype.requireContainer || (ctype.requireContainer && this.depositManager.resourceContainers.length > 0))) {
 
-                    if (ctype.type == Constants.ROLE_LONG_DISTANCE_MINER && !this.roomMemoryObject.scoutNeeded && (!this.roomMemoryObject.longDistanceMining ||
-                        this.roomMemoryObject.longDistanceMining.length == 0))
+                    if (ctype.type == Constants.ROLE_LONG_DISTANCE_MINER && this.roomMemoryObject.scoutNeeded)
                         continue;
 
                     if (ctype.total < ctype.max) {
@@ -166,7 +188,8 @@ roomManager.prototype.populate = function() {
 
             // spawn claimer
             if (!spawnType) {
-                if (Memory.claimRoom && Memory.spawnClaimer == true) {
+                if (Memory.claimRoom && this.roomMemoryObject.spawnClaimer) {
+                    // TODO : reset spawnClaimer
                     this.creepFactory.new(Constants.ROLE_CLAIMER, this.depositManager.getSpawnDeposit());
                     var roomObject = {
                         name : Memory.claimRoom,
@@ -184,7 +207,13 @@ roomManager.prototype.populate = function() {
 };
 
 roomManager.prototype.defend = function() {
+    var cpuTime = Game.cpu.getUsed();
+    var cpuUsed = 0;
+
     this.defenseManager.operateTowers();
+
+    cpuUsed = Game.cpu.getUsed() - cpuTime;
+    globals.addValue('defend', cpuUsed);
 };
 
 /*

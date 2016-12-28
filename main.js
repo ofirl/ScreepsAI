@@ -26,13 +26,15 @@ module.exports.loop = function  () {
     profiler.wrap(function() {
         // Main.js logic should go here.
 
+        globals.reset();
+        
         PathFinder.use(true);
 
         // clear memory
         generalFunctions.clearMemory();
 
-        /*var cpuTime = Game.cpu.getUsed();
-        var cpuUsed = 0;*/
+        var cpuTime = Game.cpu.getUsed();
+        var cpuUsed = 0;
         // init rooms
         for (let i in Memory.rooms) {
             //var n = Memory.rooms[room].name;
@@ -45,8 +47,8 @@ module.exports.loop = function  () {
             RoomHandler.set(Game.rooms[n], roomHandler);
         }
 
-        //cpuUsed = Game.cpu.getUsed() - cpuTime;
-        //globals.addValue('init', cpuUsed);
+        cpuUsed = Game.cpu.getUsed() - cpuTime;
+        globals.addValue('init', cpuUsed);
 
         // Load rooms
         var rooms = RoomHandler.getRoomHandlers();
