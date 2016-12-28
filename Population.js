@@ -109,7 +109,7 @@ function Population(room) {
         var creep = this.creeps[i];
         var creepType = creep.memory.role;
         var currTypeDistribution = this.typeDistribution[creepType];
-        console.log(this.typeDistribution[creepType].type);
+        console.log(this.typeDistribution[creepType].type + " - " + this.typeDistribution[creepType].total);
         if(this.typeDistribution[creepType]) {
             this.typeDistribution[creepType] = createTypeDistribution(creepType);
         }
