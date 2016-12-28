@@ -14,8 +14,6 @@ var globalVars = {
 };
 
 function Globals() {
-    for (var n in globalVars)
-        globalVars[n] = 0;
 }
 
 Globals.get = function (key) {
@@ -24,6 +22,11 @@ Globals.get = function (key) {
 
 Globals.addValue = function (key, value) {
     globalVars[key] += value;
+};
+
+Globals.reset = function () {
+    for (var n in globalVars)
+        globalVars[n] = 0;
 };
 
 module.exports = Globals;

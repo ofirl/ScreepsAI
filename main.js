@@ -26,6 +26,7 @@ module.exports.loop = function  () {
     profiler.wrap(function() {
         // Main.js logic should go here.
 
+        globals.reset();
         console.log(globals.get('creepFunc'));
         PathFinder.use(true);
 
