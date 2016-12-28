@@ -36,6 +36,8 @@ function roomManager(room, roomHandler, roomMemoryObject) {
         this.roomMemoryObject.longDistanceMining ? this.roomMemoryObject.longDistanceMining.length : 0;
     //this.population.typeDistribution.CreepCarrier.max = this.population.typeDistribution.CreepBuilder.max+this.population.typeDistribution.CreepMiner.max;
     this.population.typeDistribution.CreepCarrier.max = 2;
+    if (this.room.controller.level < 4)
+        this.population.typeDistribution.CreepCarrier.max += 1;
     if (this.room.storage)
         this.population.typeDistribution.CreepCarrier.max += Math.floor(this.room.storage.store.energy / 250000);
     this.population.typeDistribution.CreepLorry.max = this.resourceManager.getSources().length;
@@ -52,7 +54,7 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
     //Memory.stats["room." + room.name + ".controllerProgress"] = room.controller.progress;
 
-    
+
     var flag = this.room.find(FIND_FLAGS)[0];
     if (this.room.controller.level == 4 && this.room.lookForAt(LOOK_CONSTRUCTION_SITES, flag).length == 0)
         this.room.createConstructionSite(flag, STRUCTURE_STORAGE);
