@@ -2,7 +2,7 @@ var globals = require('Globals');
 
 var CONST = {
     RAMPART_MAX: 1,
-    RAMPART_FIX: 0.10,
+    RAMPART_FIX: 0.30,
     STANDARD_FIX: 0.50,
     STANDARD_MAX : 1,
 };
