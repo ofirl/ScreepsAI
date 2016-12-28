@@ -8,6 +8,8 @@ var MarketManager = require('MarketManager');
 var Constants = require('Constants');
 var generalFunctions = require('generalFunctions');
 
+var globals = require('Globals');
+
 function roomManager(room, roomHandler, roomMemoryObject) {
     this.room = room;
     this.roomHandler = roomHandler;
@@ -183,7 +185,13 @@ roomManager.prototype.populate = function() {
 };
 
 roomManager.prototype.defend = function() {
+    var cpuTime = Game.cpu.getUsed();
+    var cpuUsed = 0;
+
     this.defenseManager.operateTowers();
+
+    cpuUsed = Game.cpu.getUsed() - cpuTime;
+    globals.addValue('defend', cpuUsed);
 };
 
 /*

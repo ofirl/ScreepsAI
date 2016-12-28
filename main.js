@@ -27,6 +27,7 @@ module.exports.loop = function  () {
         // Main.js logic should go here.
 
         globals.reset();
+        
         PathFinder.use(true);
 
         // clear memory

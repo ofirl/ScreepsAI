@@ -40,11 +40,11 @@ module.exports = function () {
 
     Memory.stats['cpu.SetupRoles'] = globals.get('rolesSetup');
     Memory.stats['cpu.CreepFunc'] = globals.get('creepFunc');
+    Memory.stats['cpu.Init'] = globals.get('init');
+    Memory.stats['cpu.Defense'] = globals.get('defend');
     /*
     Memory.stats['cpu.CreepManagers'] = creepManagement
-    Memory.stats['cpu.Towers'] = towersRunning
     Memory.stats['cpu.Links'] = linksRunning
-    Memory.stats['cpu.Creeps'] = functionsExecutedFromCreeps
     Memory.stats['cpu.SumProfiling'] = sumOfProfiller
     Memory.stats['cpu.Start'] = startOfMain
     Memory.stats['cpu.stats'] = Game.cpu.getUsed() - lastTick

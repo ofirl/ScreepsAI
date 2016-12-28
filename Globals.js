@@ -5,7 +5,7 @@ var globalVars = {
     creepsManagement: 0,
     rolesSetup : 0,
     creepFunc : 0,
-    defenseManager: 0,
+    defend: 0,
     constructionManager: 0,
     depositManager: 0,
     resourceManager: 0,
