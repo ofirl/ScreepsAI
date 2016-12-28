@@ -53,13 +53,11 @@ DefenseManager.prototype.operateTowers = function () {
                 tower.attack(target);
         }
     }
-    else {
-        // if damaged friendly creeps found
-        if (this.damagedCreeps.length > 0) {
-            for (let tower of this.towers) {
-                var target = tower.pos.findClosestByRange(this.damagedCreeps);
-                tower.heal(target);
-            }
+    // if damaged friendly creeps found
+    else if (this.damagedCreeps.length > 0) {
+        for (let tower of this.towers) {
+            var target = tower.pos.findClosestByRange(this.damagedCreeps);
+            tower.heal(target);
         }
     }
 };
