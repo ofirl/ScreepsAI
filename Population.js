@@ -115,7 +115,6 @@ function Population(room) {
         }
         currTypeDistribution.total++;
 
-        // TODO : check why it's not working
         if (creep.ticksToLive < currTypeDistribution.nextDeath)
             currTypeDistribution.nextDeath = creep.ticksToLive;
     }
@@ -123,8 +122,10 @@ function Population(room) {
     // OPTIMIZATION : need to do it better
     for (let c in Game.creeps) {
         var creep = Game.creeps[c];
-        if (creep.memory.role == 'CreepLongDistanceMiner' && creep.memory['srcStorageRoom'] == this.room.name)
+        if (creep.memory.role == 'CreepLongDistanceMiner' && creep.memory['srcStorageRoom'] == this.room.name) {
             this.typeDistribution.CreepLongDistanceMiner.total++;
+            console.log(creep.name);
+        }
     }
     /*this.typeDistribution.CreepLongDistanceMiner.total = Game.find(FIND_MY_CREEPS, {
         filter : (c) => c.memory.role == 'CreepLongDistanceMining'
