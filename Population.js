@@ -109,15 +109,15 @@ function Population(room) {
         var creep = this.creeps[i];
         var creepType = creep.memory.role;
         var currTypeDistribution = this.typeDistribution[creepType];
-        console.log(currTypeDistribution.type);
-        if(currTypeDistribution) {
-            currTypeDistribution = createTypeDistribution(creepType);
+        console.log(this.typeDistribution[creepType].type);
+        if(this.typeDistribution[creepType]) {
+            this.typeDistribution[creepType] = createTypeDistribution(creepType);
         }
-        currTypeDistribution.total++;
+        this.typeDistribution[creepType].total++;
 
         // TODO : check why it's not working
-        if (creep.ticksToLive < currTypeDistribution.nextDeath)
-            currTypeDistribution.nextDeath = creep.ticksToLive;
+        if (creep.ticksToLive < this.typeDistribution[creepType].nextDeath)
+            this.typeDistribution[creepType].nextDeath = creep.ticksToLive;
     }
 
     // OPTIMIZATION : need to do it better
