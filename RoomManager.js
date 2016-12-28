@@ -27,7 +27,7 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     this.population.typeDistribution.CreepBuilder.max = 3;
     if (this.room.controller.level < 3)
         this.population.typeDistribution.CreepBuilder.max += 1;
-    if (this.room.controller.level < 4)
+    if (this.room.controller.level < 4 || !this.room.storage)
         this.population.typeDistribution.CreepBuilder.max += 2;
     if (this.room.storage)
         this.population.typeDistribution.CreepBuilder.max += Math.floor(this.room.storage.store.energy / 250000);
@@ -54,10 +54,10 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     //Memory.stats["room." + room.name + ".energyCapacityAvailable"] = room.energyCapacityAvailable;
     //Memory.stats["room." + room.name + ".controllerProgress"] = room.controller.progress;
 
-
+    /*
     var flag = this.room.find(FIND_FLAGS)[0];
     if (this.room.controller.level == 4 && this.room.lookForAt(LOOK_CONSTRUCTION_SITES, flag).length == 0)
-        this.room.createConstructionSite(flag, STRUCTURE_STORAGE);
+        this.room.createConstructionSite(flag, STRUCTURE_STORAGE);*/
 }
 
 roomManager.prototype.loadCreeps = function() {
