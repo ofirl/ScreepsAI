@@ -140,8 +140,9 @@ Constructions.prototype.constructStructure = function(creep) {
     var avoidArea = creep.getAvoidedArea();
     var site;
     var build = false;
+    var checkWalls = !creep.remember('dedicated-builder') || (creep.remember('dedicated-builder') && this.sites.length == 0);
 
-    if (!creep.remember('dedicated-builder') && this.damagedStructures.length != 0) {
+    if (checkWalls && this.damagedStructures.length != 0) {
         site = creep.creep.pos.findClosestByPath(this.damagedStructures);
         //creep.creep.say('damaged');
     }
