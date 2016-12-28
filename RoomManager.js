@@ -54,7 +54,7 @@ function roomManager(room, roomHandler, roomMemoryObject) {
 }
 
 roomManager.prototype.loadCreeps = function() {
-    var creeps = this.room.find(FIND_MY_CREEPS);
+    var creeps = this.population.creeps;
     for(var i = 0; i < creeps.length; i++) {
         var c = this.creepFactory.load(creeps[i]);
         if(c)
