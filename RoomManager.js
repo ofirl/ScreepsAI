@@ -95,10 +95,14 @@ roomManager.prototype.distributeBuilders = function() {
             if(creep.remember('role') != 'CreepBuilder')
                 continue;
 
-            if (c < Constants.numUpgraders)
+            if (c < Constants.numUpgraders) {
                 creep.remember('force-controller-upgrade', true);
-            else if (dedicatedBuilders && c < Constants.numDedicatedBuilders)
+                creep.remember('dedicated-builder', false);
+            }
+            else if (dedicatedBuilders && c < Constants.numDedicatedBuilders) {
+                creep.remember('force-controller-upgrade', false);
                 creep.remember('dedicated-builder', true);
+            }
             else {
                 creep.remember('force-controller-upgrade', false);
                 creep.remember('dedicated-builder', false);
