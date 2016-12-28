@@ -22,6 +22,21 @@ var actionsQueue = [];
 }
  */
 
+/*
+    dupes snippet
+ const names = ['Mike', 'Matt', 'Nancy', 'Adam', 'Jenny', 'Nancy', 'Carl']
+
+ const count = names =>
+ names.reduce((a, b) => 
+ Object.assign(a, {[b]: (a[b] || 0) + 1}), {})
+
+ const duplicates = dict =>
+ Object.keys(dict).filter((a) => dict[a] > 1)
+
+ console.log(count(names)) // { Mike: 1, Matt: 1, Nancy: 2, Adam: 1, Jenny: 1, Carl: 1 }
+ console.log(duplicates(count(names))) // [ 'Nancy' ]
+ */
+
 function Globals() {
 }
 
