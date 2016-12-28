@@ -1,4 +1,5 @@
 var Cache = require('Cache');
+var Constants = require('Constants');
 
 function Population(room) {
 	this.cache = new Cache();
@@ -108,6 +109,11 @@ function Population(room) {
     for(var i = 0; i < this.creeps.length; i++) {
         var creep = this.creeps[i];
         var creepType = creep.memory.role;
+
+        // don't count long distance miners, it's happening later
+        if (creepType == Constants.ROLE_LONG_DISTANCE_MINER)
+            continue;
+
         var currTypeDistribution = this.typeDistribution[creepType];
         if(!currTypeDistribution) {
             this.typeDistribution[creepType] = createTypeDistribution(creepType);
