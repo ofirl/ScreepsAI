@@ -53,8 +53,8 @@ function Population(room) {
             currentPercentage: 0,
             max: 1,
             minExtensions: 0,
-            requireStorage : true,
-            requireContainer : false
+            requireStorage : false,
+            requireContainer : true
         },
         CreepHarvester: {
             type : 'CreepHarvester',

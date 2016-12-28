@@ -96,11 +96,12 @@ creepLongDistanceMiner.prototype.act = function() {
         }
         else {
             var storage = this.depositManager.room.storage;
+            // got storage
             if (storage != undefined) {
                 if (this.creep.emptyCarry(storage) == ERR_NOT_IN_RANGE)
                     this.creep.moveToIfAble(storage);
             }
-            // should never happen - long distance mining = got storage already
+            // long distance mining before storage
             else {
                 storage = this.creep.pos.findClosestByPath(this.depositManager.getAvailableContainersToDeposit());
                 if (storage != undefined) {

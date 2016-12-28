@@ -1,5 +1,6 @@
 var Cache = require('Cache');
 var roomHandler = require('RoomHandler');
+var generalFunctions = require('generalFunctions');
 
 function DefenseManager(room, roomMemoryObject) {
     this.room = room;
@@ -19,6 +20,15 @@ function DefenseManager(room, roomMemoryObject) {
             filter : (c) => c.hits < c.hitsMax
         }
     );
+
+    // TODO :check if the memory works like that
+    // update counters
+    if (roomMemoryObject.ticksToScout && roomMemoryObject.ticksToScout > 0)
+        generalFunctions.updateTicksToScout(roomMemoryObject);
+    if (roomMemoryObject.resetScout && roomMemoryObject.resetScout >= 0)
+        roomMemoryObject.resetScout--;
+    if (roomMemoryObject.resetScout == 0)
+        roomMemoryObject.scoutNeeded = false;
 
     Memory.stats['room.' + room.name + '.defenderIndex'] = this.hostileCreeps.length;
 }
@@ -64,6 +74,7 @@ DefenseManager.prototype.callForScout = function (roomName) {
                 continue;
 
             room.scoutNeeded = true;
+            room.resetScout = 1500; // life time of invaders
             return;
         }
     }

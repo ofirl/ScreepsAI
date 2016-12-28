@@ -16,8 +16,6 @@ function roomManager(room, roomHandler, roomMemoryObject) {
     this.creeps = [];
     this.structures = [];
     this.roomMemoryObject = roomMemoryObject;
-    if (roomMemoryObject.ticksToScout && roomMemoryObject.ticksToScout > 0)
-        generalFunctions.updateTicksToScout(roomMemoryObject);
 
     this.population = new Population(this.room);
     this.depositManager = new Deposits(this.room);
@@ -167,8 +165,7 @@ roomManager.prototype.populate = function() {
                     (!ctype.requireStorage || (ctype.requireStorage && this.room.storage != undefined)) &&
                     (!ctype.requireContainer || (ctype.requireContainer && this.depositManager.resourceContainers.length > 0))) {
 
-                    if (ctype.type == Constants.ROLE_LONG_DISTANCE_MINER && !this.roomMemoryObject.scoutNeeded && (!this.roomMemoryObject.longDistanceMining ||
-                        this.roomMemoryObject.longDistanceMining.length == 0))
+                    if (ctype.type == Constants.ROLE_LONG_DISTANCE_MINER && this.roomMemoryObject.scoutNeeded)
                         continue;
 
                     if (ctype.total < ctype.max) {
@@ -190,7 +187,8 @@ roomManager.prototype.populate = function() {
 
             // spawn claimer
             if (!spawnType) {
-                if (Memory.claimRoom && Memory.spawnClaimer == true) {
+                if (Memory.claimRoom && this.roomMemoryObject.spawnClaimer) {
+                    // TODO : reset spawnClaimer
                     this.creepFactory.new(Constants.ROLE_CLAIMER, this.depositManager.getSpawnDeposit());
                     var roomObject = {
                         name : Memory.claimRoom,
