@@ -81,6 +81,7 @@ Constructions.prototype.getDamagedStructures = function() {
     );
 };
 
+// obsolete
 Constructions.prototype.getUpgradeableStructures = function() {
     return this.cache.remember(
         'upgradeable-structures',
@@ -123,18 +124,23 @@ Constructions.prototype.getConstructionSiteById = function(id) {
     );
 };
 
+// obsolete
 Constructions.prototype.getController = function() {
     return this.controller;
 };
 
-Constructions.prototype.getClosestConstructionSite = function(creep) {
-    var site = false;
-    if(this.sites.length != 0)
-        site = creep.pos.findClosestByPath(this.sites);
-
-    return site;
+Constructions.prototype.getBestConstructionSiteFor = function(pos, filter = null) {
+    let sites;
+    if( filter ) sites = this.sites.filter(filter);
+    else sites = this.sites;
+    let siteOrder = [STRUCTURE_SPAWN,STRUCTURE_EXTENSION,STRUCTURE_LINK,STRUCTURE_STORAGE,STRUCTURE_TOWER,STRUCTURE_ROAD,STRUCTURE_CONTAINER,STRUCTURE_EXTRACTOR,STRUCTURE_WALL,STRUCTURE_RAMPART];
+    let rangeOrder = site => {
+        let order = siteOrder.indexOf(site.structureType);
+        if( order < 0 ) return 100000 + pos.getRangeTo(site);
+        return ((order - (site.progress / site.progressTotal)) * 100) + pos.getRangeTo(site);
+    };
+    return _.minBy(sites, rangeOrder);
 };
-
 
 Constructions.prototype.constructStructure = function(creep) {
     var avoidArea = creep.getAvoidedArea();
@@ -147,7 +153,8 @@ Constructions.prototype.constructStructure = function(creep) {
         //creep.creep.say('damaged');
     }
     else if(this.sites.length != 0) {
-        site = creep.creep.pos.findClosestByPath(this.sites);
+        site = this.getBestConstructionSiteFor(creep.creep.pos);
+        //site = creep.creep.pos.findClosestByPath(this.sites);
         build = true;
         //creep.creep.say('build');
     }
