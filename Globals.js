@@ -13,10 +13,6 @@ var globalVars = {
     sumOfProfiler: 0,
 };
 
-var ACTIONS = {
-    MOVE : 1,
-};
-
 var actionsQueue =
 {
     move : [],
@@ -26,6 +22,7 @@ var actionsQueue =
     creep (=who) - creep object
     type (=what) - move/attack/heal/...
     target - if exists / needed
+    opts - options for API method call
     room - room name
     accepted - true\false - by the resolver
 }
@@ -33,6 +30,10 @@ var actionsQueue =
 
 function Globals() {
 }
+
+Globals.ACTIONS = {
+    MOVE : "move",
+};
 
 Globals.get = function (key) {
     return globalVars[key];
@@ -50,13 +51,24 @@ Globals.reset = function () {
         globalVars[n] = 0;
 };
 
+Globals.addActionToQueue = function (creep, type, target, opts) {
+    actionsQueue[type].push(
+        {
+            creep : creep,
+            target : target,
+            room : creep.room.name,
+            opts : opts,
+        }
+    );
+};
+
 Globals.resolveActionsQueue = function () {
     // resolve move actions
     resolveMoveActions(actionsQueue.move);
     // (later on) resolve other actions here
 };
 
-Globals.executeActionQueue = function () {
+Globals.executeActionsQueue = function () {
     // resolve queue before execution
     Globals.resolveActionsQueue();
 
@@ -69,7 +81,7 @@ Globals.executeActionQueue = function () {
 function executeMoveActions (actions) {
     for (var a in actions) {
         var action = actions[a];
-        action.creep.moveTo(action.target);
+        action.creep.moveTo(action.target, action.opts);
     }
 }
 

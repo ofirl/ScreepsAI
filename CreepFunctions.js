@@ -1,11 +1,13 @@
 var Constants= require('Constants');
+var globals = rquire('Globals');
 
 module.exports = function() {
 
     Creep.prototype.moveToIfAble =
         function(target, opts) {
             if (this.fatigue == 0)
-                return this.moveTo(target, opts);
+                globals.addActionToQueue(this, globals.ACTIONS.MOVE, target, opts);
+                //return this.moveTo(target, opts);
 
             return ERR_TIRED;
     };

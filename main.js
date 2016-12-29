@@ -95,6 +95,9 @@ module.exports.loop = function  () {
             }
         }
 
+        // execute actions queue
+        globals.executeActionsQueue();
+
         require('stats')();
 
     });
