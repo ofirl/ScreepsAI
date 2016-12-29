@@ -1,10 +1,13 @@
 var Constants= require('Constants');
-var globals = rquire('Globals');
+var globals = require('Globals');
 
 module.exports = function() {
 
     Creep.prototype.moveToIfAble =
         function(target, opts) {
+            if (!target)
+                return ERR_INVALID_ARGS;
+            
             if (this.fatigue == 0)
                 globals.addActionToQueue(this, globals.ACTIONS.MOVE, target, opts);
                 //return this.moveTo(target, opts);

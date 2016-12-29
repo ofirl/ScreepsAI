@@ -11,6 +11,7 @@ var globalVars = {
     resourceManager: 0,
     populationManager: 0,
     sumOfProfiler: 0,
+    actionsQueue : 0,
 };
 
 var actionsQueue =
@@ -82,6 +83,7 @@ function executeMoveActions (actions) {
     for (var a in actions) {
         var action = actions[a];
         action.creep.moveTo(action.target, action.opts);
+        console.log(action.creep.name + ' (x : ' + action.nextPos.x + ', y : ' + action.nextPos.y + ')');
     }
 }
 
@@ -93,6 +95,20 @@ function resolveMoveActions (moveActions) {
         var creepPosX = action.creep.pos.x;
         var creepPosY = action.creep.pos.y;
 
+        if (!action.creep.memory._move) {
+            action.creep.memory._move =
+            {
+                dest : {
+                    x : action.target.pos.x,
+                    y : action.target.pos.y,
+                    room : action.target.pos.roomName
+                },
+                time : Game.time,
+                path : Room.serializePath(action.creep.pos.findPathTo(action.target, action.opts)),
+                room : action.creep.room.name,
+            };
+        }
+
         var serializedPath = action.creep.memory._move.path;
         var deserializedPath = Room.deserializePath(serializedPath);
         var currentPathPos = deserializedPath.filter(
@@ -101,7 +117,8 @@ function resolveMoveActions (moveActions) {
                 return obj.x == creepPosX && obj.y == creepPosY
             }
         );
-        action.nextPos = getNextPos(currentPathPos);
+
+        action.nextPos = currentPathPos.length > 0 ? getNextPos(currentPathPos[0]) : deserializedPath[0];
     }
 
     // going over the queue and resolving
@@ -111,7 +128,8 @@ function resolveMoveActions (moveActions) {
             continue;
 
         var conflicts = [];
-        for (var conflict in moveActions) {
+        for (var c in moveActions) {
+            var conflict = moveActions[c];
             if (conflict.accepted != undefined)
                 continue;
 
@@ -128,6 +146,8 @@ function resolveMoveConflicts (conflicts){
     // accept the first one only
     for (var i = 0; i < conflicts.length; i++) {
         conflicts[i].accepted = i > 0;
+        if (i > 0)
+            console.log('conflict avoided : ' + conflicts[i].creep.name);
     }
 }
 
@@ -197,9 +217,9 @@ module.exports = Globals;
 //profiler setup
 const profiler = require('profiler');
 profiler.registerObject(Globals, 'Globals');
-profiler.registerFN(executeMoveActions, "Globals.ExecuteMoveActions");
-profiler.registerFN(resolveMoveActions, "Globals.ResolveMoveActions");
-profiler.registerFN(resolveMoveConflicts, "Globals.ResolveMoveConflicts");
-profiler.registerFN(isConflictingMove, "Globals.IsConflictingMove");
-profiler.registerFN(getNextPos, "Globals.GetNextPos");
+executeMoveActions = profiler.registerFN(executeMoveActions, 'Globals.ExecuteMoveActions');
+resolveMoveActions = profiler.registerFN(resolveMoveActions, 'Globals.ResolveMoveActions');
+resolveMoveConflicts = profiler.registerFN(resolveMoveConflicts, 'Globals.ResolveMoveConflicts');
+isConflictingMove = profiler.registerFN(isConflictingMove, 'Globals.IsConflictingMove');
+getNextPos = profiler.registerFN(getNextPos, 'Globals.GetNextPos');
 

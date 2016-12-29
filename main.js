@@ -95,8 +95,15 @@ module.exports.loop = function  () {
             }
         }
 
+
+        cpuTime = Game.cpu.getUsed();
+
         // execute actions queue
         globals.executeActionsQueue();
+
+        cpuUsed = Game.cpu.getUsed() - cpuTime;
+        globals.addValue('actionsQueue', cpuUsed);
+        console.log(cpuUsed);
 
         require('stats')();
 

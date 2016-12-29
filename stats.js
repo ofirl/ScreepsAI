@@ -37,6 +37,7 @@ module.exports = function () {
     Memory.stats['cpu.bucket'] = Game.cpu.bucket;
     Memory.stats['cpu.limit'] = Game.cpu.limit;
     Memory.stats['cpu.getUsed'] = Game.cpu.getUsed();
+    Memory.stats['cpu.ActionsQueue'] = globals.get('actionsQueue');
 
     Memory.stats['cpu.SetupRoles'] = globals.get('rolesSetup');
     Memory.stats['cpu.CreepFunc'] = globals.get('creepFunc');
